@@ -89,7 +89,8 @@
     .sidebar-brand strong { display: block; font-size: 12px; line-height: 1.25; }
     .sidebar-brand small { display: block; margin-top: 4px; color: #8692b1; font-size: 10px; }
     .nav-label { padding: 8px 11px; color: #8190b1; font-size: 10px; font-weight: 750; letter-spacing: .13em; }
-    .nav-list { display: grid; gap: 5px; overflow-y: auto; }
+    .nav-list { display: grid; gap: 5px; overflow-y: auto; scrollbar-width: none; }
+    .nav-list::-webkit-scrollbar { display: none; }
     .nav-item {
       display: flex;
       align-items: center;
@@ -279,6 +280,8 @@
     .profile-identity-copy { min-width: 0; }
     .profile-identity-copy h2 { margin: 0; font-size: clamp(17px, 2.5vw, 22px); letter-spacing: -.035em; }
     .profile-identity-copy p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+    .profile-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+    .profile-heading .section-subtitle { margin-bottom: 0; }
     .profile-active { margin-left: auto; padding: 6px 11px; border-radius: 99px; background: #e8f7f0; color: #318263; font-size: 10px; font-weight: 750; white-space: nowrap; }
     .profile-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
     .profile-group { min-width: 0; padding: 19px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
@@ -288,6 +291,70 @@
     .profile-details .wide { grid-column: 1 / -1; }
     .profile-details dt { color: var(--muted); font-size: 10px; }
     .profile-details dd { margin: 3px 0 0; overflow-wrap: anywhere; font-size: 12px; font-weight: 650; }
+    .profile-form { display: grid; gap: 14px; }
+    .profile-form .profile-group { padding: 19px; }
+    .profile-form .field { margin: 12px 0 0; }
+    .profile-form .field label { color: #49516c; font-size: 11px; font-weight: 700; }
+    .profile-form .field textarea { min-height: 82px; resize: vertical; }
+    .profile-form .profile-actions { display: flex; align-items: center; gap: 12px; }
+    .profile-form .privacy-note { margin: 0; color: var(--muted); font-size: 11px; }
+    .faculty-profile { display: grid; gap: 16px; }
+    .faculty-hero { padding: 24px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+    .faculty-hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 34%); align-items: center; gap: 24px; }
+    .faculty-portrait { display: block; width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; object-fit: cover; object-position: center; }
+    .faculty-hero h2 { margin: 0; font-size: clamp(20px, 3vw, 27px); letter-spacing: -.035em; }
+    .faculty-hero .faculty-role { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+    .faculty-hero .faculty-summary { margin: 15px 0 0; font-size: 13px; }
+    .faculty-links { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+    .faculty-links a, .faculty-card a { color: var(--purple); font-size: 12px; font-weight: 700; text-decoration: none; }
+    .faculty-links a:hover, .faculty-card a:hover { text-decoration: underline; }
+    .faculty-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .faculty-card { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .faculty-card h2 { margin: 0 0 12px; font-size: 15px; }
+    .faculty-card h3 { margin: 16px 0 5px; font-size: 13px; }
+    .faculty-card p { margin: 7px 0; color: #49516c; font-size: 12px; }
+    .faculty-card ul { display: grid; gap: 8px; margin: 0; padding-left: 18px; color: #49516c; font-size: 12px; }
+    .faculty-card .faculty-muted { color: var(--muted); font-size: 11px; }
+    .faculty-card.full-width { grid-column: 1 / -1; }
+    .faculty-tags { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 !important; list-style: none; }
+    .faculty-tags li { padding: 6px 10px; border-radius: 99px; background: var(--purple-light); color: var(--purple-dark); font-size: 11px; font-weight: 650; }
+    .faculty-timeline { display: grid; gap: 15px; }
+    .faculty-entry { padding-left: 13px; border-left: 2px solid #e6e3ff; }
+    .faculty-entry h3 { margin: 0; }
+    .faculty-entry p { margin: 4px 0 0; }
+    .faculty-institution { display: flex; align-items: center; gap: 12px; }
+    .faculty-institution img { width: 42px; height: 42px; border-radius: 10px; object-fit: cover; }
+    .faculty-note { padding: 13px 15px; border-radius: 10px; background: var(--blue); color: #49516c; font-size: 11px; }
+    .experiment-pdf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 22px; }
+    .experiment-pdf { display: flex; min-width: 0; align-items: center; gap: 11px; padding: 13px; border: 1px solid var(--line); border-radius: 11px; background: #fff; color: inherit; text-decoration: none; transition: border-color .2s, transform .2s; }
+    .experiment-pdf:hover { transform: translateY(-1px); border-color: #c9c2ff; }
+    .experiment-pdf-icon { display: grid; width: 36px; height: 36px; flex: 0 0 auto; place-items: center; border-radius: 9px; background: #f0eeff; color: var(--purple-dark); font-size: 10px; font-weight: 800; }
+    .experiment-pdf-copy { min-width: 0; }
+    .experiment-pdf-copy strong, .experiment-pdf-copy small { display: block; overflow-wrap: anywhere; }
+    .experiment-pdf-copy strong { font-size: 11px; }
+    .experiment-pdf-copy small { margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .experiment-pdf-download { margin-left: auto; color: var(--purple); font-size: 10px; font-weight: 750; white-space: nowrap; }
+    .experiment-code-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0 0 27px; }
+    .experiment-code-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .experiment-code-heading { padding: 16px 17px 11px; }
+    .experiment-code-heading h3 { margin: 0; font-size: 13px; }
+    .experiment-code-heading p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
+    .experiment-code-editor { display: block; width: calc(100% - 24px); min-height: 250px; margin: 0 12px; padding: 12px; resize: vertical; border: 1px solid #252b43; border-radius: 9px; background: #151a2d; color: #e7eaff; font: 11px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; tab-size: 4; }
+    .experiment-code-editor:focus { outline: 2px solid #9c92f2; outline-offset: 2px; }
+    .experiment-code-actions { display: flex; align-items: center; gap: 8px; padding: 11px 12px; }
+    .experiment-code-actions button { min-height: 34px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); font-size: 10px; font-weight: 700; }
+    .experiment-code-actions button[data-python-run] { border-color: var(--purple); background: var(--purple); color: #fff; }
+    .experiment-code-actions button:disabled { cursor: wait; opacity: .65; }
+    .experiment-run-status { margin-left: auto; color: var(--muted); font-size: 10px; }
+    .experiment-run-status[data-state="error"] { color: #b42318; }
+    .experiment-run-status[data-state="success"] { color: #247452; }
+    .experiment-code-output { min-height: 43px; max-height: 320px; overflow: auto; margin: 0 12px 12px; padding: 11px; border: 1px solid #e8eaf1; border-radius: 9px; background: #f8f9fc; color: #27304b; font: 11px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .experiment-code-plots { display: grid; gap: 8px; margin: 0 12px 12px; }
+    .experiment-code-plots img { display: block; max-width: 100%; margin: 0 auto; border: 1px solid var(--line); background: #fff; }
+    .experiment-runtime-note { margin: 0 0 18px; padding: 12px 15px; border-radius: 10px; background: var(--blue); color: #49516c; font-size: 11px; }
+    @media (max-width: 760px) {
+      .experiment-code-grid { grid-template-columns: 1fr; }
+    }
     .empty-state { padding: 35px; border: 1px dashed #dfe1ea; border-radius: 12px; background: #fff; color: var(--muted); text-align: center; font-size: 12px; }
     .toast { position: fixed; right: 22px; bottom: 22px; z-index: 5; padding: 12px 17px; border-radius: 10px; background: #212743; color: #fff; box-shadow: var(--shadow); font-size: 12px; }
 
@@ -314,6 +381,11 @@
       .hero-art { margin: 0; font-size: 53px; }
       .content-grid { grid-template-columns: 1fr; }
       .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .faculty-grid { grid-template-columns: 1fr; }
+      .faculty-card.full-width { grid-column: auto; }
+      .faculty-hero-layout { grid-template-columns: 1fr; }
+      .faculty-portrait { max-width: 440px; }
+      .experiment-pdf-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 450px) {
       .welcome-row { align-items: flex-start; }
@@ -348,7 +420,7 @@
       <nav class="nav-list" aria-label="Main navigation">
         <button class="nav-item active" type="button" data-page="home"><span class="nav-icon">⌂</span>Overview</button>
         <button class="nav-item" type="button" data-page="modules"><span class="nav-icon">▦</span>Modules &amp; Syllabus</button>
-        <button class="nav-item" type="button" data-page="labs"><span class="nav-icon">⌘</span>Lab &amp; Python Editor</button>
+        <button class="nav-item" type="button" data-page="labs"><span class="nav-icon">▣</span>Projects</button>
         <button class="nav-item" type="button" data-page="tools"><span class="nav-icon">⚙</span>Data Science Tools</button>
         <button class="nav-item" type="button" data-page="faculty"><span class="nav-icon">♙</span>Data Science Faculty</button>
         <button class="nav-item" type="button" data-page="exam"><span class="nav-icon">▤</span>Question Papers &amp; Exam Practice</button>
@@ -385,6 +457,7 @@
 
   <script src="module-1/decks.js"></script>
   <script src="module-2/decks.js"></script>
+  <script src="projects/experiment-1/examples.js"></script>
   <script>
     const MODULES = [
       { title: "Introduction to Data Science", description: "Data thinking, workflows, and the data science lifecycle.", icon: "🌱", progress: 72 },
@@ -424,6 +497,30 @@
       state: "",
       profilePhoto: ""
     };
+    const PROFILE_FIELDS = [
+      { group: "Personal information", fields: [
+        ["name", "Display name", "text"], ["title", "Profile title", "text"],
+        ["firstName", "First name", "text"], ["lastName", "Last name", "text"],
+        ["dateOfBirth", "Date of birth", "date"], ["age", "Age", "number"],
+        ["gender", "Gender", "text"]
+      ] },
+      { group: "Enrollment", fields: [
+        ["studentStatus", "Student status", "text"], ["admissionNumber", "Admission number", "text"],
+        ["admissionYear", "Admission year", "text"], ["rollNumber", "Roll number", "text"],
+        ["school", "School", "text"], ["department", "Department", "text"],
+        ["semester", "Semester", "text"], ["academicYear", "Academic year", "text"]
+      ] },
+      { group: "Course details", fields: [
+        ["course", "Course name", "text"], ["college", "College / university", "text"],
+        ["curriculumPlan", "Curriculum plan", "text"], ["academicStanding", "Academic standing", "text"],
+        ["academicClassification", "Academic classification", "text"], ["discountCategory", "Discount category", "text"],
+        ["intake", "Intake", "text"], ["programValidityDate", "Program validity date", "date"]
+      ] },
+      { group: "Family & address", fields: [
+        ["fatherName", "Father's name", "text"], ["motherName", "Mother's name", "text"],
+        ["address", "Address", "textarea"], ["city", "City / district", "text"], ["state", "State", "text"]
+      ] }
+    ];
     const INITIAL_PROJECTS = [];
     const TOOLS = [
       { title: "Google Colab", description: "Write and run Python notebooks in your browser.", icon: "📓", link: "https://colab.research.google.com/" },
@@ -437,12 +534,38 @@
       { title: "scikit-learn user guide", description: "Practical guides to machine learning in Python.", icon: "🤖", link: "https://scikit-learn.org/stable/user_guide.html" },
       { title: "Our lab projects on GitHub", description: "Open your project repository and keep your work together.", icon: "🔗", link: "https://github.com/" }
     ];
+    const FACULTY_EDUCATION = [
+      { title: "Doctor of Philosophy (PhD), Computer Software Engineering", institution: "Indian Institute of Information Technology Kota", years: "November 2021–December 2028", detail: "Research topic: Quantum Artificial Intelligence for Deep Space Network Communications" },
+      { title: "AMIE, Section-B (Computer Science and Engineering)", institution: "Institution of Engineers of India (IEI), Kolkata", years: "2018–2020", detail: "Grade: 7.82 CGPA · Completed within three semesters/attempts · Project: Artificial Intelligence · Activities and societies: B.Tech Computer Science and Engineering" },
+      { title: "Master of Technology (MTech), Computer Science and Engineering", institution: "Jawaharlal Nehru Technological University, Kakinada", years: "2013–2015", detail: "Grade: 76.0% · Research area: Computer Networks and Artificial Intelligence" },
+      { title: "Master of Computer Applications (MCA), Computer Applications", institution: "Jawaharlal Nehru Technological University, Kakinada", years: "2007–2010", detail: "Grade: 72.0% · Research area: Computer Networks" },
+      { title: "Bachelor of Science (BSc), Mathematics, Physics and Chemistry", institution: "Andhra University", years: "2004–2007", detail: "Grade: 65.64% · Research area: Physics, with a focus on Space Physics and Cosmology" },
+      { title: "Online Course, Space Technology and its Applications", institution: "Indian Institute of Remote Sensing (IIRS), Indian Space Research Organisation (ISRO)", years: "2021", detail: "" }
+    ];
+    const FACULTY_EXPERIENCE = [
+      { role: "Founder & CEO · Full-time", organization: "Jack Sparrow Publishers Pvt Ltd", years: "April 2024–present", detail: "California, USA; Sydney, Australia; and Visakhapatnam, Andhra Pradesh, India · Hybrid · Publications: Jack Sparrow Publishers · IJRDES · IJCSER · IJCSEAI" },
+      { role: "Assistant Professor · Full-time", organization: "Mohan Babu University, Tirupati", years: "July 2024–present", detail: "On-site" },
+      { role: "Associate Professor of Computer Science and Engineering · Full-time", organization: "Lendi Institute of Engineering and Technology", years: "July 2022–April 2024", detail: "Vizianagaram, Andhra Pradesh, India · On-site" },
+      { role: "Assistant Professor of Computer Science and Engineering · Full-time", organization: "Raghu Engineering College", years: "February 2021–June 2022", detail: "Visakhapatnam, Andhra Pradesh, India" },
+      { role: "Assistant Professor and HOD of CSE", organization: "Viswanadha Institute of Technology and Management", years: "July 2018–January 2021", detail: "Visakhapatnam, Andhra Pradesh, India" },
+      { role: "Assistant Professor of Computer Science and Engineering · Full-time", organization: "Avanthi's Research & Technological Academy", years: "July 2016–June 2018", detail: "Vizianagaram, Andhra Pradesh, India" },
+      { role: "Assistant Professor of Computer Science and Engineering · Full-time", organization: "Simhadhri Engineering College", years: "July 2015–June 2016", detail: "Visakhapatnam, Andhra Pradesh, India" },
+      { role: "Assistant Professor of Computer Science and Engineering · Full-time", organization: "Viswanadha Institute of Technology and Management (VITAM)", years: "August 2010–September 2013", detail: "Visakhapatnam, Andhra Pradesh, India" }
+    ];
+    const EXPERIMENT_PDFS = Array.from({ length: 10 }, (_, index) => {
+      const number = index + 1;
+      const filename = number <= 3 ? `DataScience_Program${number}.pdf` : `DS_Program${number}.pdf`;
+      return { number, filename };
+    });
+    const PYODIDE_VERSION = "0.27.7";
+    let pyodidePromise = null;
 
     const $ = (selector, root = document) => root.querySelector(selector);
     const pageContent = $("#pageContent");
     let profile = null;
     let projects = [];
     let isAddingProject = false;
+    let isEditingProfile = false;
     const notebookStates = {
       1: { deckIndex: 0, slideIndex: 0, isTurning: false, turnTimer: null },
       2: { deckIndex: 0, slideIndex: 0, isTurning: false, turnTimer: null }
@@ -495,12 +618,132 @@
       toastTimer = setTimeout(() => toast.classList.add("hidden"), 2800);
     }
 
-    function openApp() {
+    function refreshProfileIdentity() {
       $("#sidebarName").textContent = profile.name;
       $("#sidebarRegister").textContent = profile.rollNumber;
       document.querySelectorAll(".profile-avatar").forEach(element => {
         element.outerHTML = profileAvatar(element.className);
       });
+    }
+
+    function loadPyodideScript() {
+      if (window.loadPyodide) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/pyodide.js`;
+        script.onload = () => window.loadPyodide ? resolve() : reject(new Error("Pyodide loaded without its runtime initializer."));
+        script.onerror = () => reject(new Error("Could not download Pyodide. Check your internet connection and try again."));
+        document.head.appendChild(script);
+      });
+    }
+
+    async function getPyodide() {
+      if (!pyodidePromise) {
+        pyodidePromise = (async () => {
+          await loadPyodideScript();
+          return window.loadPyodide({ indexURL: `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/` });
+        })().catch(error => {
+          pyodidePromise = null;
+          throw error;
+        });
+      }
+      return pyodidePromise;
+    }
+
+    async function installPythonRequirements(pyodide, code) {
+      const packages = new Set(["numpy"]);
+      if (/\bpandas\b/.test(code)) packages.add("pandas");
+      if (/\bmatplotlib\b|\bplt\./.test(code)) packages.add("matplotlib");
+      if (/\bsklearn\b/.test(code)) packages.add("scikit-learn");
+      if (packages.size) await pyodide.loadPackage([...packages]);
+      const purePythonPackages = [];
+      if (/\bfrom\s+bs4\b|\bimport\s+bs4\b/.test(code)) purePythonPackages.push("beautifulsoup4");
+      if (/\bto_excel\s*\(|\bread_excel\s*\(/.test(code)) purePythonPackages.push("openpyxl");
+      if (purePythonPackages.length) {
+        await pyodide.loadPackage("micropip");
+        pyodide.globals.set("__python_packages", purePythonPackages);
+        await pyodide.runPythonAsync("import micropip; await micropip.install(__python_packages)");
+      }
+    }
+
+    async function runPythonExample(number) {
+      const editor = $(`[data-python-editor="${number}"]`, pageContent);
+      const output = $(`[data-python-output="${number}"]`, pageContent);
+      const plots = $(`[data-python-plots="${number}"]`, pageContent);
+      const status = $(`[data-python-status="${number}"]`, pageContent);
+      const runButton = $(`[data-python-run="${number}"]`, pageContent);
+      const code = editor.value;
+      runButton.disabled = true;
+      status.dataset.state = "running";
+      status.textContent = "Starting Python…";
+      output.textContent = "Loading the in-browser Python runtime and required packages…";
+      plots.replaceChildren();
+
+      try {
+        const pyodide = await getPyodide();
+        await installPythonRequirements(pyodide, code);
+        status.textContent = "Running…";
+        pyodide.globals.set("__user_code", code);
+        const result = await pyodide.runPythonAsync(`
+import base64
+import contextlib
+import io
+import json
+import sys
+import traceback
+
+__captured_output = io.StringIO()
+with contextlib.redirect_stdout(__captured_output), contextlib.redirect_stderr(__captured_output):
+    try:
+        exec(compile(__user_code, "<project example>", "exec"), globals())
+    except BaseException:
+        traceback.print_exc()
+
+__captured_plots = []
+if "matplotlib.pyplot" in sys.modules:
+    import matplotlib.pyplot as __plt
+    for __figure_number in __plt.get_fignums():
+        __image = io.BytesIO()
+        __plt.figure(__figure_number).savefig(__image, format="png", bbox_inches="tight")
+        __captured_plots.append(base64.b64encode(__image.getvalue()).decode("ascii"))
+    __plt.close("all")
+
+json.dumps({"output": __captured_output.getvalue(), "plots": __captured_plots})
+`);
+        const resultData = JSON.parse(result);
+        output.textContent = resultData.output || "Program completed successfully with no printed output.";
+        resultData.plots.forEach(image => {
+          const imageElement = document.createElement("img");
+          imageElement.alt = "Plot produced by the Python example";
+          imageElement.src = `data:image/png;base64,${image}`;
+          plots.appendChild(imageElement);
+        });
+        const hasError = /Traceback \(most recent call last\):/.test(resultData.output);
+        status.dataset.state = hasError ? "error" : "success";
+        status.textContent = hasError ? "Python error" : "Complete";
+      } catch (error) {
+        console.error(`Python example ${number} could not run.`, error);
+        output.textContent = `Could not run this example:\n${error.message}`;
+        status.dataset.state = "error";
+        status.textContent = "Runtime error";
+      } finally {
+        runButton.disabled = false;
+      }
+    }
+
+    function resetPythonExample(number) {
+      const example = (window.EXPERIMENT_EXAMPLES || []).find(item => String(item.number) === String(number));
+      if (!example) return;
+      $(`[data-python-editor="${number}"]`, pageContent).value = example.code;
+      $(`[data-python-output="${number}"]`, pageContent).textContent = "Edit the code and select Run Python to see the result.";
+      $(`[data-python-plots="${number}"]`, pageContent).replaceChildren();
+      const status = $(`[data-python-status="${number}"]`, pageContent);
+      status.dataset.state = "";
+      status.textContent = "Ready";
+    }
+
+    function openApp() {
+      refreshProfileIdentity();
       $("#todayLabel").textContent = new Intl.DateTimeFormat("en", { weekday: "short", month: "short", day: "numeric" }).format(new Date());
       renderPage("home");
     }
@@ -517,7 +760,7 @@
     }
 
     function projectRows(limit = projects.length) {
-      if (!projects.length) return '<div class="empty-state">No lab projects yet. Add a project and link its GitHub repository.</div>';
+      if (!projects.length) return '<div class="empty-state">No projects yet. Add a project and link its GitHub repository.</div>';
       return projects.slice(0, limit).map(project => `
         <div class="assignment-row">
           <div class="assignment-icon" aria-hidden="true">⌘</div>
@@ -559,7 +802,7 @@
         </section>
         <section class="stats-grid" aria-label="Learning overview">
           <article class="stat-card"><span class="stat-icon">▦</span><div><strong>05</strong><small>Course modules</small></div></article>
-          <article class="stat-card"><span class="stat-icon">⌘</span><div><strong>${String(projects.length).padStart(2, "0")}</strong><small>Lab projects</small></div></article>
+          <article class="stat-card"><span class="stat-icon">▣</span><div><strong>${String(projects.length).padStart(2, "0")}</strong><small>Projects</small></div></article>
           <article class="stat-card"><span class="stat-icon">✦</span><div><strong>02</strong><small>Projects in progress</small></div></article>
           <article class="stat-card"><span class="stat-icon">↗</span><div><strong>${MODULES.filter(module => module.progress > 0).length}</strong><small>Modules started</small></div></article>
         </section>
@@ -569,7 +812,7 @@
         </section>
         <section class="content-grid">
           <article class="panel">
-            <div class="panel-heading"><h2>Lab assignments</h2><button type="button" data-page="labs">View all →</button></div>
+            <div class="panel-heading"><h2>Projects</h2><button type="button" data-page="labs">View all →</button></div>
             ${projectRows(3)}
           </article>
           <article class="panel">
@@ -586,8 +829,39 @@
     function renderProjects() {
       return `
         <section class="section-view">
-          <h1 class="section-title">Lab &amp; Python Editor</h1>
-          <p class="section-subtitle">Keep track of your practical work and link each project to its GitHub repository.</p>
+          <h1 class="section-title">Projects</h1>
+          <p class="section-subtitle">Run and edit a Python example for each program, or download its full PDF.</p>
+          <section aria-labelledby="experimentOneTitle">
+            <div class="section-heading">
+              <div><h2 id="experimentOneTitle">Experiment 1</h2><p>Each program has an editable Python example and its full document.</p></div>
+            </div>
+            <p class="experiment-runtime-note">Python runs in your browser using Pyodide. The runtime and Python packages are downloaded from the internet the first time you run an example. Your code is not uploaded by this site and resets to the sample when you leave Projects. These starter examples use sample data. Browser security may prevent your own code from accessing some websites or files.</p>
+            <div class="experiment-code-grid">
+              ${(window.EXPERIMENT_EXAMPLES || []).map(example => `
+                <article class="experiment-code-card">
+                  <div class="experiment-code-heading">
+                    <h3>Program ${example.number} · ${escapeHTML(example.title)}</h3>
+                    <p>${escapeHTML(example.description)}</p>
+                  </div>
+                  <textarea id="pythonEditor-${example.number}" class="experiment-code-editor" aria-label="Python code for Program ${example.number}" spellcheck="false" autocapitalize="off" autocomplete="off" data-python-editor="${example.number}">${escapeHTML(example.code)}</textarea>
+                  <div class="experiment-code-actions">
+                    <button type="button" data-python-run="${example.number}">▶ Run Python</button>
+                    <button type="button" data-python-reset="${example.number}">Reset</button>
+                    <span class="experiment-run-status" data-python-status="${example.number}" aria-live="polite">Ready</span>
+                  </div>
+                  <pre class="experiment-code-output" data-python-output="${example.number}" aria-live="polite">Edit the code and select Run Python to see the result.</pre>
+                  <div class="experiment-code-plots" data-python-plots="${example.number}"></div>
+                </article>`).join("")}
+            </div>
+            <div class="experiment-pdf-grid">
+              ${EXPERIMENT_PDFS.map(({ number, filename }) => `
+                <a class="experiment-pdf" href="projects/experiment-1/${filename}" download>
+                  <span class="experiment-pdf-icon" aria-hidden="true">PDF</span>
+                  <span class="experiment-pdf-copy"><strong>Program ${number}</strong><small>${filename}</small></span>
+                  <span class="experiment-pdf-download">Download ↓</span>
+                </a>`).join("")}
+            </div>
+          </section>
           <div class="section-heading"><div><h2>Your projects</h2><p>Add a repository link to make your work easy to find.</p></div><button class="primary-button" id="addProjectButton" type="button">${isAddingProject ? "Cancel" : "＋ Add project"}</button></div>
           ${isAddingProject ? `
           <form id="projectForm" class="project-form">
@@ -728,65 +1002,153 @@
     }
 
     function renderProfile() {
-      const field = (label, value, wide = false) => `
-        <div${wide ? ' class="wide"' : ""}>
-          <dt>${label}</dt>
-          <dd>${value ? escapeHTML(value) : "—"}</dd>
-        </div>`;
-      const group = (title, fields) => `
-        <section class="profile-group">
-          <h2>${title}</h2>
-          <dl class="profile-details">${fields}</dl>
-        </section>`;
+      const field = ([name, label, type]) => {
+        const value = name === "name" && profile.name === "Student" ? "" : profile[name] || "";
+        if (!isEditingProfile) {
+          return `<div${type === "textarea" ? ' class="wide"' : ""}><dt>${label}</dt><dd>${value ? escapeHTML(value) : "—"}</dd></div>`;
+        }
+        return `
+          <div class="field">
+            <label for="profile-${name}">${label}</label>
+            ${type === "textarea"
+              ? `<textarea id="profile-${name}" name="${name}" maxlength="500">${escapeHTML(value)}</textarea>`
+              : `<input id="profile-${name}" name="${name}" type="${type}" value="${escapeHTML(value)}"${type === "number" ? ' min="0"' : ""}>`}
+          </div>`;
+      };
       return `
         <section class="section-view">
-          <h1 class="section-title">Student profile</h1>
-          <p class="section-subtitle">Student and academic information. Profile details are read-only.</p>
+          <div class="profile-heading">
+            <div>
+              <h1 class="section-title">My profile</h1>
+              <p class="section-subtitle">${isEditingProfile ? "Update your personal and academic information." : "Your personal and academic information."}</p>
+            </div>
+            ${isEditingProfile ? "" : '<button class="primary-button" type="button" data-profile-edit>Edit profile</button>'}
+          </div>
           <div class="profile-identity">
             ${profileAvatar("avatar profile-placeholder")}
             <div class="profile-identity-copy">
-              <h2>${escapeHTML(profile.name)}</h2>
+              <h2>${escapeHTML(profile.name || "Student")}</h2>
               <p>${escapeHTML(profile.course)}</p>
               <p>${escapeHTML(profile.college)}</p>
             </div>
-            <span class="profile-active">${escapeHTML(profile.studentStatus)}</span>
           </div>
-          <div class="profile-groups">
-            ${group("Enrollment", [
-              field("Student status", profile.studentStatus),
-              field("Admission number", profile.admissionNumber),
-              field("Admission year", profile.admissionYear),
-              field("Roll number", profile.rollNumber),
-              field("School", profile.school),
-              field("Department", profile.department),
-              field("Semester", profile.semester),
-              field("Academic year", profile.academicYear)
-            ].join(""))}
-            ${group("Course details", [
-              field("Course name", profile.course, true),
-              field("College / university", profile.college, true),
-              field("Curriculum plan", profile.curriculumPlan),
-              field("Academic standing", profile.academicStanding),
-              field("Academic classification", profile.academicClassification),
-              field("Discount category", profile.discountCategory, true),
-              field("Intake", profile.intake),
-              field("Program validity date", profile.programValidityDate)
-            ].join(""))}
-            ${group("Personal information", [
-              field("Profile title", profile.title),
-              field("First name", profile.firstName, true),
-              field("Last name", profile.lastName),
-              field("Date of birth", profile.dateOfBirth),
-              field("Age", profile.age),
-              field("Gender", profile.gender)
-            ].join(""))}
-            ${group("Family & address", [
-              field("Father's name", profile.fatherName, true),
-              field("Mother's name", profile.motherName, true),
-              field("Address", profile.address, true),
-              field("City / district", profile.city),
-              field("State", profile.state)
-            ].join(""))}
+          ${isEditingProfile ? `<form id="profileForm" class="profile-form">
+            ${PROFILE_FIELDS.map(group => `
+              <section class="profile-group">
+                <h2>${group.group}</h2>
+                <div class="profile-details">${group.fields.map(field).join("")}</div>
+              </section>`).join("")}
+            <section class="profile-group">
+              <h2>Profile photo</h2>
+              <div class="field"><label for="profilePhoto">Choose an image (up to 1 MB)</label><input id="profilePhoto" name="profilePhoto" type="file" accept="image/*"></div>
+            </section>
+            <div class="profile-actions">
+              <button class="primary-button" type="submit">Save profile</button>
+              <button class="secondary-button" type="button" data-profile-cancel>Cancel</button>
+              <p class="privacy-note">Saved only in this browser; this is not a password-protected account.</p>
+            </div>
+          </form>` : `<div class="profile-groups">
+            ${PROFILE_FIELDS.slice(0, 3).map(group => `
+              <section class="profile-group">
+                <h2>${group.group}</h2>
+                <dl class="profile-details">${group.fields.map(field).join("")}</dl>
+              </section>`).join("")}
+            <section class="profile-group">
+              <h2>Family &amp; address</h2>
+              <dl class="profile-details">${PROFILE_FIELDS[3].fields.map(field).join("")}</dl>
+            </section>
+          </div><p class="privacy-note" style="margin-top:14px">Saved only in this browser; this is not a password-protected account.</p>`}
+        </section>`;
+    }
+
+    function renderFaculty() {
+      const education = FACULTY_EDUCATION.map(item => `
+        <article class="faculty-entry">
+          <h3>${escapeHTML(item.title)}</h3>
+          <p>${escapeHTML(item.institution)} · ${escapeHTML(item.years)}</p>
+          ${item.detail ? `<p class="faculty-muted">${escapeHTML(item.detail)}</p>` : ""}
+        </article>`).join("");
+      const experience = FACULTY_EXPERIENCE.map(item => `
+        <article class="faculty-entry">
+          <h3>${escapeHTML(item.role)}</h3>
+          <p>${escapeHTML(item.organization)} · ${escapeHTML(item.years)}</p>
+          <p class="faculty-muted">${escapeHTML(item.detail)}</p>
+        </article>`).join("");
+      const expertise = [
+        "Artificial Intelligence", "Block Chain", "Space Exploration",
+        "Internet of Things", "Astronomy & Astrophysics", "Cosmology"
+      ];
+      return `
+        <section class="section-view">
+          <p class="nav-label" style="padding-left:0;color:var(--purple)">MBU · DATA SCIENCE</p>
+          <h1 class="section-title">Data Science Faculty</h1>
+          <p class="section-subtitle">Faculty profile, academic background and research interests.</p>
+          <div class="faculty-profile">
+            <header class="faculty-hero">
+              <div class="faculty-hero-layout">
+                <div>
+                  <p class="faculty-muted">Profile reference: Bosubabu Sambana with Dr. A. P. J. Abdul Kalam</p>
+                  <h2>Bosubabu Sambana</h2>
+                  <p class="faculty-role">Assistant Professor, Computer Science and Engineering · Mohan Babu University</p>
+                  <p class="faculty-summary">Computer scientist and innovator of Internet Protocol Version 16 (IPv16).</p>
+                  <div class="faculty-links">
+                    <a href="https://www.bosubabu.com/" target="_blank" rel="noopener noreferrer">Contact faculty ↗ www.bosubabu.com</a>
+                    <a href="mailto:bosubabu.s@mbu.asia">bosubabu.s@mbu.asia</a>
+                    <a href="tel:+919640641136">Mobile no: 9640641136</a>
+                    <a href="https://www.youtube.com/results?search_query=Bosubabu+Sambana" target="_blank" rel="noopener noreferrer">Find channel on YouTube ↗</a>
+                  </div>
+                </div>
+                <img class="faculty-portrait" src="faculty-bosubabu.png" alt="Bosubabu Sambana with Dr. A. P. J. Abdul Kalam">
+              </div>
+            </header>
+            <div class="faculty-grid">
+              <section class="faculty-card">
+                <h2>Introduction</h2>
+                <p>Sambana's work and teaching span computer science, data science, artificial intelligence, network communications and emerging applications for space systems.</p>
+                <h3>Skills and expertise</h3>
+                <ul class="faculty-tags">${expertise.map(skill => `<li>${escapeHTML(skill)}</li>`).join("")}</ul>
+              </section>
+              <section class="faculty-card">
+                <h2>Current institution</h2>
+                <div class="faculty-institution">
+                  <img src="library-logo.jpe" alt="Mohan Babu University logo">
+                  <div><strong>Mohan Babu University</strong><p>Computer Science and Engineering (Data Science)</p></div>
+                </div>
+                <h3>Current position</h3>
+                <p>Assistant Professor · July 2024–present</p>
+                <h3>Faculty channel</h3>
+                <a href="https://www.youtube.com/results?search_query=Bosubabu+Sambana" target="_blank" rel="noopener noreferrer">Find channel on YouTube ↗</a>
+              </section>
+              <section class="faculty-card full-width">
+                <h2>Education</h2>
+                <div class="faculty-timeline">${education}</div>
+              </section>
+              <section class="faculty-card full-width">
+                <h2>Experience</h2>
+                <div class="faculty-timeline">${experience}</div>
+              </section>
+              <section class="faculty-card">
+                <h2>Research and academic contributions</h2>
+                <ul>
+                  <li><strong>50+ research papers:</strong> Profile lists publications indexed across Scopus, SCI, Web of Science and UGC-listed journals.</li>
+                  <li><strong>Research editor and conference organizer:</strong> Editor or co-editor of 16 volumes, including Springer and IEEE publications; organized 11 Springer international conferences.</li>
+                  <li><strong>Editorial leadership and teaching content:</strong> Editor-in-Chief of IJRDES, IJCSER, PROSER and LNES; also creates online course content.</li>
+                  <li><strong>Research recognition:</strong> Profile reports six international and national scientist and researcher awards, along with research grants and projects.</li>
+                  <li><strong>Innovation and intellectual property:</strong> Profile highlights work related to scalable connectivity, IoT and deep-space communications.</li>
+                </ul>
+              </section>
+              <section class="faculty-card">
+                <h2>Innovation and intellectual property</h2>
+                <ul>
+                  <li><strong>Indian patent grant 573267:</strong> IPv16 · Application 202141039287</li>
+                  <li><strong>International PCT publication:</strong> WO2023/031952 A2 · Application PCT/IN2022/050620</li>
+                  <li><strong>Copyright registrations:</strong> Indian registration L-108397/2021 and US registration TXu 2-273-973 are listed in the supplied profile.</li>
+                </ul>
+                <p class="faculty-muted">The supplied profile describes IPv16 as a proposed next-generation internet architecture.</p>
+              </section>
+              <p class="faculty-note faculty-card full-width">Academic and career details are presented as provided and should be verified with the university or official records.</p>
+            </div>
+            <footer class="faculty-muted">Mohan Babu University · Digital Library · Learning starts here.</footer>
           </div>
         </section>`;
     }
@@ -802,22 +1164,14 @@
           flip.classList.remove("turning-forward", "turning-backward");
         }
       });
-      const titles = { home: "Overview", modules: "Modules & Syllabus", labs: "Lab & Python Editor", tools: "Data Science Tools", faculty: "Data Science Faculty", exam: "Question Papers & Exam Practice", viva: "Viva Practice", profile: "My Profile", resources: "Resources", ai: "AI model" };
+      const titles = { home: "Overview", modules: "Modules & Syllabus", labs: "Projects", tools: "Data Science Tools", faculty: "Data Science Faculty", exam: "Question Papers & Exam Practice", viva: "Viva Practice", profile: "My Profile", resources: "Resources", ai: "AI model" };
       document.querySelectorAll(".nav-item").forEach(button => button.classList.toggle("active", button.dataset.page === page));
       $("#breadcrumbPage").textContent = titles[page] || "Home";
       if (page === "home") pageContent.innerHTML = renderHome();
       else if (page === "modules") pageContent.innerHTML = renderModulePage();
       else if (page === "labs") pageContent.innerHTML = renderProjects();
       else if (page === "tools") pageContent.innerHTML = `<section class="section-view"><h1 class="section-title">Data science tools</h1><p class="section-subtitle">A few useful places to experiment, analyze, and build.</p>${resourceCards(TOOLS)}</section>`;
-      else if (page === "faculty") pageContent.innerHTML = `
-        <section class="section-view">
-          <h1 class="section-title">Data Science Faculty</h1>
-          <p class="section-subtitle">Faculty information for your program.</p>
-          <div class="detail-card" style="max-width:720px;padding:24px">
-            <h3>Faculty directory</h3>
-            <p>Faculty names and contact details have not been added to the library yet.</p>
-          </div>
-        </section>`;
+      else if (page === "faculty") pageContent.innerHTML = renderFaculty();
       else if (page === "exam") pageContent.innerHTML = `
         <section class="section-view">
           <h1 class="section-title">Question Papers &amp; Exam Practice</h1>
@@ -877,6 +1231,24 @@
       });
       const projectForm = $("#projectForm");
       if (projectForm) projectForm.addEventListener("submit", saveProjectForm);
+      pageContent.querySelectorAll("[data-python-run]").forEach(button => {
+        button.addEventListener("click", () => runPythonExample(button.dataset.pythonRun));
+      });
+      pageContent.querySelectorAll("[data-python-reset]").forEach(button => {
+        button.addEventListener("click", () => resetPythonExample(button.dataset.pythonReset));
+      });
+      const profileForm = $("#profileForm");
+      if (profileForm) profileForm.addEventListener("submit", saveProfileForm);
+      const editProfileButton = $("[data-profile-edit]");
+      if (editProfileButton) editProfileButton.addEventListener("click", () => {
+        isEditingProfile = true;
+        renderPage("profile");
+      });
+      const cancelProfileButton = $("[data-profile-cancel]");
+      if (cancelProfileButton) cancelProfileButton.addEventListener("click", () => {
+        isEditingProfile = false;
+        renderPage("profile");
+      });
       document.querySelectorAll("[data-notebook-deck]").forEach(select => {
         const moduleNumber = Number(select.dataset.notebookDeck);
         const state = notebookStates[moduleNumber];
@@ -937,6 +1309,52 @@
       isAddingProject = false;
       renderPage("labs");
       showToast("GitHub project added.");
+    }
+
+    async function saveProfileForm(event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const data = new FormData(form);
+      const updatedProfile = { ...profile };
+      PROFILE_FIELDS.forEach(group => group.fields.forEach(([name]) => {
+        updatedProfile[name] = String(data.get(name) || "").trim();
+      }));
+      const photo = data.get("profilePhoto");
+      if (photo instanceof File && photo.size > 0) {
+        if (!photo.type.startsWith("image/")) {
+          showToast("Choose a valid image file for your profile photo.");
+          return;
+        }
+        if (photo.size > 1024 * 1024) {
+          showToast("Choose a profile photo smaller than 1 MB.");
+          return;
+        }
+        try {
+          updatedProfile.profilePhoto = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result));
+            reader.onerror = () => reject(reader.error || new Error("Could not read the selected profile photo."));
+            reader.readAsDataURL(photo);
+          });
+        } catch (error) {
+          console.error("Could not read the selected profile photo.", error);
+          showToast("Profile photo could not be read.");
+          return;
+        }
+      }
+      updatedProfile.name = updatedProfile.name || [updatedProfile.firstName, updatedProfile.lastName].filter(Boolean).join(" ") || "Student";
+      try {
+        localStorage.setItem("dsdl-profile", JSON.stringify(updatedProfile));
+      } catch (error) {
+        console.error("Could not save the student profile.", error);
+        showToast("Profile could not be saved in this browser.");
+        return;
+      }
+      profile = updatedProfile;
+      isEditingProfile = false;
+      refreshProfileIdentity();
+      renderPage("profile");
+      showToast("Profile saved in this browser.");
     }
 
     document.querySelectorAll("[data-page]").forEach(button => {

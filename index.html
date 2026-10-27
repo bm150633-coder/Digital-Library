@@ -125,6 +125,7 @@
       color: var(--purple);
       font-size: 12px;
       font-weight: 800;
+      object-fit: cover;
     }
     .topbar .avatar { width: 42px; height: 42px; }
     .user-mini strong { display: block; max-width: 130px; overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
@@ -362,7 +363,7 @@
           <button type="button" class="text-button" data-go="resources">Explore resources →</button>
         </div>
         <div class="user-mini">
-          <div class="avatar" aria-hidden="true">ST</div>
+          <div class="avatar profile-avatar" aria-hidden="true">ST</div>
           <div><strong id="sidebarName">Student</strong><small id="sidebarRegister">Student account</small></div>
         </div>
       </div>
@@ -374,7 +375,7 @@
         <div class="topbar-actions">
           <span class="date-label" id="todayLabel"></span>
           <button type="button" class="icon-button" data-page="profile" aria-label="Open student profile" title="Student profile">◎</button>
-          <div class="avatar" aria-hidden="true">ST</div>
+          <div class="avatar profile-avatar" aria-hidden="true">ST</div>
         </div>
       </header>
       <div id="pageContent" class="page-content"></div>
@@ -420,7 +421,8 @@
       motherName: "",
       address: "",
       city: "",
-      state: ""
+      state: "",
+      profilePhoto: ""
     };
     const INITIAL_PROJECTS = [];
     const TOOLS = [
@@ -448,7 +450,13 @@
     let toastTimer;
 
     function readSavedState() {
-      profile = STUDENT_PROFILE;
+      try {
+        const savedProfile = localStorage.getItem("dsdl-profile");
+        profile = savedProfile ? { ...STUDENT_PROFILE, ...JSON.parse(savedProfile) } : STUDENT_PROFILE;
+      } catch (error) {
+        console.error("Could not read the saved student profile.", error);
+        profile = STUDENT_PROFILE;
+      }
       try {
         projects = JSON.parse(localStorage.getItem("dsdl-projects") || "null") || INITIAL_PROJECTS;
       } catch (error) {
@@ -472,6 +480,13 @@
       return name.trim().split(/\s+/).slice(0, 2).map(part => part[0] || "").join("").toUpperCase() || "ST";
     }
 
+    function profileAvatar(className = "avatar") {
+      if (profile.profilePhoto) {
+        return `<img class="${className}" src="${escapeHTML(profile.profilePhoto)}" alt="Profile photo of ${escapeHTML(profile.name)}">`;
+      }
+      return `<div class="${className}" aria-hidden="true">${escapeHTML(initials(profile.name))}</div>`;
+    }
+
     function showToast(message) {
       const toast = $("#toast");
       toast.textContent = message;
@@ -483,6 +498,9 @@
     function openApp() {
       $("#sidebarName").textContent = profile.name;
       $("#sidebarRegister").textContent = profile.rollNumber;
+      document.querySelectorAll(".profile-avatar").forEach(element => {
+        element.outerHTML = profileAvatar(element.className);
+      });
       $("#todayLabel").textContent = new Intl.DateTimeFormat("en", { weekday: "short", month: "short", day: "numeric" }).format(new Date());
       renderPage("home");
     }
@@ -725,7 +743,7 @@
           <h1 class="section-title">Student profile</h1>
           <p class="section-subtitle">Student and academic information. Profile details are read-only.</p>
           <div class="profile-identity">
-            <div class="avatar profile-placeholder" aria-hidden="true">ST</div>
+            ${profileAvatar("avatar profile-placeholder")}
             <div class="profile-identity-copy">
               <h2>${escapeHTML(profile.name)}</h2>
               <p>${escapeHTML(profile.course)}</p>

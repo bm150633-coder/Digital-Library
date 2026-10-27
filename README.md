@@ -15,3 +15,9 @@ Open `index.html` in a browser. No build step or package installation is require
 - Lab assignment links, study resources, tools, exam revision prompts, and viva practice
 
 The profile displays generic placeholder details. Add student-specific information only in a private local copy; do not publish personal records or student photos.
+
+## Public website
+
+The `main` branch is configured to deploy this static site to GitHub Pages using GitHub Actions. After pushing changes to `main` and enabling Pages with **Settings → Pages → Build and deployment → GitHub Actions**, the public site will be available at `https://bm150633-coder.github.io/Digital-Library/`.
+
+Student profile details are saved in the visitor's browser and are not included in the repository. The default profile is generic.

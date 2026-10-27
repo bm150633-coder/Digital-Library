@@ -18,6 +18,6 @@ The profile displays generic placeholder details. Add student-specific informati
 
 ## Public website
 
-The `main` branch is configured to deploy this static site to GitHub Pages using GitHub Actions. After pushing changes to `main` and enabling Pages with **Settings → Pages → Build and deployment → GitHub Actions**, the public site will be available at `https://bm150633-coder.github.io/Digital-Library/`.
+This repository includes a GitHub Actions workflow to deploy the static site to GitHub Pages. After pushing the workflow to `main` and enabling Pages with **Settings → Pages → Build and deployment → GitHub Actions**, the public site will be available at `https://bm150633-coder.github.io/Digital-Library/`.
 
 Student profile details are saved in the visitor's browser and are not included in the repository. The default profile is generic.

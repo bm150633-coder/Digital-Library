@@ -467,34 +467,34 @@
       { title: "Big Data & Applications", description: "Discover scalable data systems and real-world uses.", icon: "☁️", progress: 0 }
     ];
     const STUDENT_PROFILE = {
-      name: "Student",
-      title: "",
-      firstName: "",
+      name: "MUNDLAMURI VENKATA SAI CHARAN",
+      title: "Mr.",
+      firstName: "MUNDLAMURI VENKATA SAI CHARAN",
       lastName: "",
-      dateOfBirth: "",
+      dateOfBirth: "2007-04-05",
       age: "",
-      gender: "",
-      studentStatus: "",
-      admissionNumber: "",
-      admissionYear: "",
-      rollNumber: "",
-      school: "",
-      department: "",
-      semester: "",
-      academicYear: "",
-      course: "",
-      college: "",
-      curriculumPlan: "",
+      gender: "Male",
+      studentStatus: "Active",
+      admissionNumber: "MBU20246990",
+      admissionYear: "2024-2025",
+      rollNumber: "24102A030147",
+      school: "School of Computing",
+      department: "Data Science",
+      semester: "V-Semester",
+      academicYear: "2026-2027",
+      course: "B.Tech. - Computer Science and Engineering (Data Science)",
+      college: "Mohan Babu University",
+      curriculumPlan: "Regular",
       academicStanding: "",
       academicClassification: "",
-      discountCategory: "",
+      discountCategory: "MBU-Management Quota",
       intake: "",
       programValidityDate: "",
-      fatherName: "",
-      motherName: "",
-      address: "",
-      city: "",
-      state: "",
+      fatherName: "MUNDLAMURI KOTESWARA RAO",
+      motherName: "MUNDLAMURI ADILAKSHMI",
+      address: "#1 9,, NANDANA MARELLA, KANIGIRI, Prakasam, Andhra Pradesh, IN",
+      city: "Prakasam",
+      state: "Andhra Pradesh",
       profilePhoto: ""
     };
     const PROFILE_FIELDS = [
@@ -565,7 +565,6 @@
     let profile = null;
     let projects = [];
     let isAddingProject = false;
-    let isEditingProfile = false;
     const notebookStates = {
       1: { deckIndex: 0, slideIndex: 0, isTurning: false, turnTimer: null },
       2: { deckIndex: 0, slideIndex: 0, isTurning: false, turnTimer: null }
@@ -576,6 +575,9 @@
       try {
         const savedProfile = localStorage.getItem("dsdl-profile");
         profile = savedProfile ? { ...STUDENT_PROFILE, ...JSON.parse(savedProfile) } : STUDENT_PROFILE;
+        Object.entries(STUDENT_PROFILE).forEach(([key, value]) => {
+          if (!profile[key] && value) profile[key] = value;
+        });
       } catch (error) {
         console.error("Could not read the saved student profile.", error);
         profile = STUDENT_PROFILE;
@@ -1004,25 +1006,18 @@ json.dumps({"output": __captured_output.getvalue(), "plots": __captured_plots})
     function renderProfile() {
       const field = ([name, label, type]) => {
         const value = name === "name" && profile.name === "Student" ? "" : profile[name] || "";
-        if (!isEditingProfile) {
-          return `<div${type === "textarea" ? ' class="wide"' : ""}><dt>${label}</dt><dd>${value ? escapeHTML(value) : "—"}</dd></div>`;
-        }
-        return `
-          <div class="field">
-            <label for="profile-${name}">${label}</label>
-            ${type === "textarea"
-              ? `<textarea id="profile-${name}" name="${name}" maxlength="500">${escapeHTML(value)}</textarea>`
-              : `<input id="profile-${name}" name="${name}" type="${type}" value="${escapeHTML(value)}"${type === "number" ? ' min="0"' : ""}>`}
-          </div>`;
+        const displayValue = type === "date" && /^\d{4}-\d{2}-\d{2}$/.test(value)
+          ? value.split("-").reverse().join("-")
+          : value;
+        return `<div${type === "textarea" ? ' class="wide"' : ""}><dt>${label}</dt><dd>${displayValue ? escapeHTML(displayValue) : "—"}</dd></div>`;
       };
       return `
         <section class="section-view">
           <div class="profile-heading">
             <div>
               <h1 class="section-title">My profile</h1>
-              <p class="section-subtitle">${isEditingProfile ? "Update your personal and academic information." : "Your personal and academic information."}</p>
+              <p class="section-subtitle">Your personal and academic information.</p>
             </div>
-            ${isEditingProfile ? "" : '<button class="primary-button" type="button" data-profile-edit>Edit profile</button>'}
           </div>
           <div class="profile-identity">
             ${profileAvatar("avatar profile-placeholder")}
@@ -1032,22 +1027,7 @@ json.dumps({"output": __captured_output.getvalue(), "plots": __captured_plots})
               <p>${escapeHTML(profile.college)}</p>
             </div>
           </div>
-          ${isEditingProfile ? `<form id="profileForm" class="profile-form">
-            ${PROFILE_FIELDS.map(group => `
-              <section class="profile-group">
-                <h2>${group.group}</h2>
-                <div class="profile-details">${group.fields.map(field).join("")}</div>
-              </section>`).join("")}
-            <section class="profile-group">
-              <h2>Profile photo</h2>
-              <div class="field"><label for="profilePhoto">Choose an image (up to 1 MB)</label><input id="profilePhoto" name="profilePhoto" type="file" accept="image/*"></div>
-            </section>
-            <div class="profile-actions">
-              <button class="primary-button" type="submit">Save profile</button>
-              <button class="secondary-button" type="button" data-profile-cancel>Cancel</button>
-              <p class="privacy-note">Saved only in this browser; this is not a password-protected account.</p>
-            </div>
-          </form>` : `<div class="profile-groups">
+          <div class="profile-groups">
             ${PROFILE_FIELDS.slice(0, 3).map(group => `
               <section class="profile-group">
                 <h2>${group.group}</h2>
@@ -1057,7 +1037,8 @@ json.dumps({"output": __captured_output.getvalue(), "plots": __captured_plots})
               <h2>Family &amp; address</h2>
               <dl class="profile-details">${PROFILE_FIELDS[3].fields.map(field).join("")}</dl>
             </section>
-          </div><p class="privacy-note" style="margin-top:14px">Saved only in this browser; this is not a password-protected account.</p>`}
+          </div>
+          <p class="privacy-note" style="margin-top:14px">Saved only in this browser; this is not a password-protected account.</p>
         </section>`;
     }
 
@@ -1237,18 +1218,6 @@ json.dumps({"output": __captured_output.getvalue(), "plots": __captured_plots})
       pageContent.querySelectorAll("[data-python-reset]").forEach(button => {
         button.addEventListener("click", () => resetPythonExample(button.dataset.pythonReset));
       });
-      const profileForm = $("#profileForm");
-      if (profileForm) profileForm.addEventListener("submit", saveProfileForm);
-      const editProfileButton = $("[data-profile-edit]");
-      if (editProfileButton) editProfileButton.addEventListener("click", () => {
-        isEditingProfile = true;
-        renderPage("profile");
-      });
-      const cancelProfileButton = $("[data-profile-cancel]");
-      if (cancelProfileButton) cancelProfileButton.addEventListener("click", () => {
-        isEditingProfile = false;
-        renderPage("profile");
-      });
       document.querySelectorAll("[data-notebook-deck]").forEach(select => {
         const moduleNumber = Number(select.dataset.notebookDeck);
         const state = notebookStates[moduleNumber];
@@ -1309,52 +1278,6 @@ json.dumps({"output": __captured_output.getvalue(), "plots": __captured_plots})
       isAddingProject = false;
       renderPage("labs");
       showToast("GitHub project added.");
-    }
-
-    async function saveProfileForm(event) {
-      event.preventDefault();
-      const form = event.currentTarget;
-      const data = new FormData(form);
-      const updatedProfile = { ...profile };
-      PROFILE_FIELDS.forEach(group => group.fields.forEach(([name]) => {
-        updatedProfile[name] = String(data.get(name) || "").trim();
-      }));
-      const photo = data.get("profilePhoto");
-      if (photo instanceof File && photo.size > 0) {
-        if (!photo.type.startsWith("image/")) {
-          showToast("Choose a valid image file for your profile photo.");
-          return;
-        }
-        if (photo.size > 1024 * 1024) {
-          showToast("Choose a profile photo smaller than 1 MB.");
-          return;
-        }
-        try {
-          updatedProfile.profilePhoto = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(String(reader.result));
-            reader.onerror = () => reject(reader.error || new Error("Could not read the selected profile photo."));
-            reader.readAsDataURL(photo);
-          });
-        } catch (error) {
-          console.error("Could not read the selected profile photo.", error);
-          showToast("Profile photo could not be read.");
-          return;
-        }
-      }
-      updatedProfile.name = updatedProfile.name || [updatedProfile.firstName, updatedProfile.lastName].filter(Boolean).join(" ") || "Student";
-      try {
-        localStorage.setItem("dsdl-profile", JSON.stringify(updatedProfile));
-      } catch (error) {
-        console.error("Could not save the student profile.", error);
-        showToast("Profile could not be saved in this browser.");
-        return;
-      }
-      profile = updatedProfile;
-      isEditingProfile = false;
-      refreshProfileIdentity();
-      renderPage("profile");
-      showToast("Profile saved in this browser.");
     }
 
     document.querySelectorAll("[data-page]").forEach(button => {

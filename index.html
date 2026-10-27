@@ -180,6 +180,23 @@
     .hero p { max-width: 480px; margin: 0; color: var(--muted); font-size: 13px; }
     .hero .hero-button { display: inline-flex; margin-top: 17px; padding: 8px 13px; border: 1px solid #cfc1aa; border-radius: 8px; background: rgba(255, 253, 248, .7); color: var(--ink); font-size: 11px; font-weight: 700; text-decoration: none; }
     .hero-art { position: relative; z-index: 1; margin-right: 45px; font-size: 78px; filter: drop-shadow(0 10px 8px rgba(75, 62, 44, .12)); }
+    .student-id-card { display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 20px; max-width: 760px; margin-top: 20px; padding: 20px; overflow: hidden; border: 1px solid #e4d8c7; border-radius: 16px; background: rgba(255, 253, 248, .97); box-shadow: var(--shadow); }
+    .student-id-photo { width: 118px; height: 148px; align-self: center; border: 1px solid var(--line); border-radius: 10px; background: var(--accent-light); object-fit: cover; object-position: center 32%; }
+    .student-id-content { min-width: 0; }
+    .student-id-header { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .student-id-logo { width: 37px; height: 37px; border-radius: 9px; object-fit: cover; }
+    .student-id-university { min-width: 0; flex: 1; }
+    .student-id-university strong, .student-id-university small { display: block; }
+    .student-id-university strong { font-size: 12px; }
+    .student-id-university small { color: var(--muted); font-size: 9px; }
+    .student-id-label { padding: 5px 8px; border-radius: 99px; background: var(--accent-light); color: var(--accent-ink); font-size: 9px; font-weight: 800; letter-spacing: .04em; white-space: nowrap; }
+    .student-id-name { margin: 12px 0 2px; font-size: 16px; line-height: 1.3; overflow-wrap: anywhere; }
+    .student-id-course { margin: 0 0 12px; color: var(--muted); font-size: 10px; }
+    .student-id-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; margin: 0; }
+    .student-id-details div { min-width: 0; }
+    .student-id-details dt { color: var(--muted); font-size: 9px; }
+    .student-id-details dd { margin: 2px 0 0; font-size: 11px; font-weight: 700; overflow-wrap: anywhere; }
+    .student-id-footer { display: flex; justify-content: space-between; gap: 10px; margin-top: 13px; padding-top: 9px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; }
     .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 20px 0 26px; }
     .stat-card { display: flex; align-items: center; gap: 12px; min-height: 82px; padding: 15px; border: 1px solid var(--line); border-radius: 13px; background: var(--paper); }
     .stat-icon { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border-radius: 12px; font-size: 18px; }
@@ -380,6 +397,15 @@
       .page-content { padding-top: 23px; }
       .hero { min-height: 170px; }
       .hero-art { margin: 0; font-size: 53px; }
+      .student-id-card { grid-template-columns: 88px minmax(0, 1fr); gap: 13px; padding: 15px; }
+      .student-id-photo { width: 88px; height: 118px; }
+      .student-id-header { gap: 7px; }
+      .student-id-logo { width: 31px; height: 31px; }
+      .student-id-university strong { font-size: 10px; }
+      .student-id-university small { font-size: 8px; }
+      .student-id-label { padding: 4px 6px; font-size: 8px; }
+      .student-id-name { font-size: 13px; }
+      .student-id-details { gap: 8px; }
       .content-grid { grid-template-columns: 1fr; }
       .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .faculty-grid { grid-template-columns: 1fr; }
@@ -392,6 +418,13 @@
       .welcome-row { align-items: flex-start; }
       .welcome-row .primary-button { min-height: 38px; padding: 0 10px; font-size: 10px; }
       .hero-art { display: none; }
+      .student-id-card { grid-template-columns: 72px minmax(0, 1fr); gap: 10px; padding: 12px; }
+      .student-id-photo { width: 72px; height: 100px; }
+      .student-id-university small { display: none; }
+      .student-id-label { font-size: 7px; }
+      .student-id-name { font-size: 12px; }
+      .student-id-details { grid-template-columns: 1fr 1fr; gap: 7px; }
+      .student-id-footer { font-size: 8px; }
       .stats-grid { gap: 8px; }
       .stat-card { gap: 8px; padding: 10px; }
       .stat-icon { width: 34px; height: 34px; font-size: 15px; }
@@ -804,6 +837,25 @@ json.dumps({"output": __captured_output.getvalue(), "plots": __captured_plots})
           </div>
           <div class="hero-art" aria-hidden="true">📚</div>
         </section>
+        <article class="student-id-card" aria-label="Student identity card">
+          <img class="student-id-photo" src="${escapeHTML(profile.profilePhoto)}" alt="Student photo of ${escapeHTML(profile.name)}">
+          <div class="student-id-content">
+            <header class="student-id-header">
+              <img class="student-id-logo" src="library-logo.jpe" alt="">
+              <div class="student-id-university"><strong>${escapeHTML(profile.college)}</strong><small>${escapeHTML(profile.school)} · ${escapeHTML(profile.department)}</small></div>
+              <span class="student-id-label">STUDENT ID</span>
+            </header>
+            <h2 class="student-id-name">${escapeHTML(profile.name)}</h2>
+            <p class="student-id-course">${escapeHTML(profile.course)}</p>
+            <dl class="student-id-details">
+              <div><dt>Registration No.</dt><dd>${escapeHTML(profile.rollNumber)}</dd></div>
+              <div><dt>Admission No.</dt><dd>${escapeHTML(profile.admissionNumber)}</dd></div>
+              <div><dt>Year of Admission</dt><dd>${escapeHTML(profile.admissionYear)}</dd></div>
+              <div><dt>Current semester</dt><dd>${escapeHTML(profile.semester)} · ${escapeHTML(profile.academicYear)}</dd></div>
+            </dl>
+            <footer class="student-id-footer"><span>Student status: ${escapeHTML(profile.studentStatus)}</span><span>${escapeHTML(profile.curriculumPlan)} curriculum</span></footer>
+          </div>
+        </article>
         <section class="stats-grid" aria-label="Learning overview">
           <article class="stat-card"><span class="stat-icon">▦</span><div><strong>05</strong><small>Course modules</small></div></article>
           <article class="stat-card"><span class="stat-icon">▣</span><div><strong>${String(projects.length).padStart(2, "0")}</strong><small>Projects</small></div></article>

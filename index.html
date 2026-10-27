@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>Data Science Digital Library</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #19213b;
+      --muted: #78819b;
+      --line: #e9ebf2;
+      --paper: #fff;
+      --canvas: #f6f7fb;
+      --purple: #6658d9;
+      --purple-dark: #5143c3;
+      --purple-light: #f0eeff;
+      --mint: #e7f7f1;
+      --orange: #fff2e5;
+      --blue: #eaf3ff;
+      --shadow: 0 15px 40px rgba(37, 43, 76, .07);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--canvas);
+      color: var(--ink);
+      font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      box-shadow: 0 9px 22px rgba(102, 88, 217, .27);
+      object-fit: cover;
+      object-position: center;
+    }
+    .field { display: grid; gap: 7px; margin: 17px 0; }
+    .field label { color: #49516c; font-size: 12px; font-weight: 700; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      min-height: 46px;
+      padding: 11px 13px;
+      border: 1px solid #e3e5ee;
+      border-radius: 10px;
+      outline: none;
+      background: #fff;
+      color: var(--ink);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: #9c92f2;
+      box-shadow: 0 0 0 3px rgba(102,88,217,.11);
+    }
+    .primary-button {
+      min-height: 46px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--purple);
+      color: #fff;
+      font-weight: 700;
+      transition: background .2s, transform .2s;
+    }
+    .primary-button:hover { background: var(--purple-dark); transform: translateY(-1px); }
+
+    /* App shell */
+    .app-shell { min-height: 100vh; display: grid; grid-template-columns: 248px minmax(0, 1fr); }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+      padding: 25px 16px 18px;
+      border-right: 1px solid #172544;
+      background: #0c1731;
+      color: #eef3ff;
+    }
+    .sidebar-brand { display: flex; align-items: center; gap: 11px; padding: 0 9px 27px; }
+    .sidebar-brand .brand-mark { width: 39px; height: 39px; border-radius: 12px; font-size: 19px; }
+    .sidebar-brand strong { display: block; font-size: 12px; line-height: 1.25; }
+    .sidebar-brand small { display: block; margin-top: 4px; color: #8692b1; font-size: 10px; }
+    .nav-label { padding: 8px 11px; color: #8190b1; font-size: 10px; font-weight: 750; letter-spacing: .13em; }
+    .nav-list { display: grid; gap: 5px; overflow-y: auto; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 11px 12px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #bdc7dd;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .nav-item:hover { background: #152643; color: #fff; }
+    .nav-item.active { background: linear-gradient(100deg, #123f57, #153754); box-shadow: inset 4px 0 #28d4e7; color: #f4fcff; }
+    .nav-item.active .nav-icon { color: #28d4e7; }
+    .nav-icon { width: 19px; text-align: center; font-size: 16px; }
+    .sidebar-bottom { margin-top: auto; }
+    .help-card { margin: 14px 4px; padding: 15px; border: 1px solid #263454; border-radius: 13px; background: #121f3d; }
+    .help-card strong { display: block; font-size: 12px; }
+    .help-card p { margin: 5px 0 10px; color: #a2aec6; font-size: 11px; }
+    .text-button { padding: 0; border: 0; background: transparent; color: #a99fff; font-size: 11px; font-weight: 700; }
+    .user-mini { display: flex; align-items: center; gap: 10px; padding: 14px 8px 0; border-top: 1px solid #273553; }
+    .avatar {
+      display: grid;
+      width: 35px;
+      height: 35px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      background: #eae7ff;
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .topbar .avatar { width: 42px; height: 42px; }
+    .user-mini strong { display: block; max-width: 130px; overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+    .user-mini small { color: #9ba8c1; font-size: 10px; }
+    .main-area { min-width: 0; padding: 0 clamp(22px, 4vw, 56px) 48px; }
+    .topbar {
+      display: flex;
+      min-height: 76px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .breadcrumb { color: var(--muted); font-size: 12px; }
+    .breadcrumb strong { color: var(--ink); }
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+    .date-label { color: var(--muted); font-size: 11px; }
+    .icon-button { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: #626b84; }
+    .page-content { max-width: 1260px; margin: 0 auto; padding-top: 30px; }
+    .welcome-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 23px; }
+    .welcome-row h1 { margin: 0; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.045em; }
+    .welcome-row p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .welcome-row .primary-button { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .hero {
+      position: relative;
+      display: flex;
+      min-height: 190px;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      padding: 30px clamp(23px, 4vw, 42px);
+      border-radius: 17px;
+      background: linear-gradient(112deg, #5547c4 0%, #7164e0 58%, #8d81ef 100%);
+      color: #fff;
+    }
+    .hero::after {
+      position: absolute;
+      top: -110px;
+      right: 7%;
+      width: 340px;
+      height: 340px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 50%;
+      box-shadow: 0 0 0 35px rgba(255,255,255,.045), 0 0 0 75px rgba(255,255,255,.035);
+      content: "";
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 560px; }
+    .hero-kicker { color: #ddd9ff; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .hero h2 { margin: 8px 0 6px; font-size: clamp(22px, 3vw, 29px); letter-spacing: -.04em; }
+    .hero p { max-width: 480px; margin: 0; color: #e6e3ff; font-size: 13px; }
+    .hero .hero-button { display: inline-flex; margin-top: 17px; padding: 8px 13px; border: 1px solid rgba(255,255,255,.4); border-radius: 8px; background: rgba(255,255,255,.12); color: #fff; font-size: 11px; font-weight: 700; text-decoration: none; }
+    .hero-art { position: relative; z-index: 1; margin-right: 45px; font-size: 78px; filter: drop-shadow(0 10px 8px rgba(35,26,100,.18)); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 20px 0 26px; }
+    .stat-card { display: flex; align-items: center; gap: 12px; min-height: 82px; padding: 15px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .stat-icon { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border-radius: 12px; font-size: 18px; }
+    .stat-card:nth-child(1) .stat-icon { background: var(--purple-light); }
+    .stat-card:nth-child(2) .stat-icon { background: var(--mint); }
+    .stat-card:nth-child(3) .stat-icon { background: var(--orange); }
+    .stat-card:nth-child(4) .stat-icon { background: var(--blue); }
+    .stat-card strong { display: block; font-size: 19px; letter-spacing: -.03em; line-height: 1.15; }
+    .stat-card small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin: 25px 0 13px; }
+    .section-heading h2 { margin: 0; font-size: 17px; letter-spacing: -.025em; }
+    .section-heading p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
+    .section-heading button { border: 0; background: transparent; color: var(--purple); font-size: 11px; font-weight: 700; }
+    .module-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .module-card { min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .module-top { display: flex; align-items: center; justify-content: space-between; }
+    .module-number { color: var(--purple); font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+    .module-emoji { font-size: 20px; }
+    .module-card h3 { min-height: 38px; margin: 12px 0 5px; font-size: 12px; line-height: 1.45; }
+    .module-card p { min-height: 45px; margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .progress-meta { display: flex; justify-content: space-between; margin: 14px 0 6px; color: var(--muted); font-size: 9px; }
+    .progress-track { height: 5px; overflow: hidden; border-radius: 8px; background: #eeeff5; }
+    .progress-track span { display: block; height: 100%; border-radius: inherit; background: var(--purple); }
+    .notebook-panel { overflow: hidden; margin-top: 21px; padding: 20px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .notebook-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+    .notebook-toolbar .field { flex: 1; margin: 0; }
+    .notebook-toolbar label { font-size: 10px; }
+    .notebook-toolbar select { min-height: 39px; font-size: 12px; }
+    .notebook-stage { display: grid; min-height: 260px; place-items: center; overflow: hidden; padding: 17px 12px; border: 1px solid #e8eaf1; border-radius: 11px; background: radial-gradient(ellipse at center, #fff 0%, #f0f1f6 76%); }
+    .notebook-book { position: relative; width: 100%; max-width: 1040px; padding: 13px 15px 13px 31px; border: 1px solid #c9b991; border-radius: 11px 6px 6px 11px; background: linear-gradient(90deg, #725735 0 12px, #c1a477 12px 17px, #e9e0cd 17px 24px, #fffdf8 24px 100%); box-shadow: 0 13px 28px rgba(54, 43, 26, .2), inset 0 0 0 2px rgba(255,255,255,.55); perspective: 1800px; touch-action: pan-y; }
+    .notebook-book::before { position: absolute; z-index: 3; top: 7px; bottom: 7px; left: 3px; width: 11px; border-radius: 6px; background: repeating-linear-gradient(180deg, transparent 0 8px, #ded4bf 8px 10px, #776243 10px 12px, transparent 12px 19px); content: ""; pointer-events: none; }
+    .notebook-book::after { position: absolute; z-index: 3; top: 0; bottom: 0; left: 19px; width: 1px; background: rgba(91, 67, 39, .25); box-shadow: 2px 0 4px rgba(67, 49, 28, .12); content: ""; pointer-events: none; }
+    .notebook-book:focus-visible { outline: 3px solid rgba(102,88,217,.4); outline-offset: 4px; }
+    .notebook-slide { display: block; width: 100%; max-height: min(65vh, 680px); aspect-ratio: 16 / 9; border-radius: 2px; background: #fff; object-fit: contain; box-shadow: 0 2px 5px rgba(37, 32, 21, .12); }
+    .page-flip { position: absolute; z-index: 2; inset: 13px 15px 13px 31px; overflow: hidden; transform: rotateY(0); transform-origin: left center; transform-style: preserve-3d; pointer-events: none; }
+    .page-flip.turning-forward { transform: rotateY(-180deg); transition: transform .68s cubic-bezier(.58,.04,.32,1); }
+    .page-flip.turning-backward { transform: rotateY(180deg); transition: transform .68s cubic-bezier(.58,.04,.32,1); }
+    .page-face { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border-radius: 2px; background: #fff; object-fit: contain; backface-visibility: hidden; }
+    .page-front { box-shadow: 7px 1px 14px rgba(33, 27, 17, .18); }
+    .page-back { transform: rotateY(180deg); box-shadow: -7px 1px 14px rgba(33, 27, 17, .14); }
+    .notebook-controls { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+    .notebook-controls button { min-height: 37px; padding: 0 13px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink); font-size: 11px; font-weight: 700; }
+    .notebook-controls button:hover:not(:disabled) { border-color: #c9c3ff; color: var(--purple); }
+    .notebook-controls button:disabled { cursor: not-allowed; opacity: .45; }
+    .notebook-controls input[type="range"] { min-width: 40px; flex: 1; accent-color: var(--purple); }
+    .notebook-page-count { min-width: 56px; color: var(--muted); text-align: center; font-size: 11px; font-variant-numeric: tabular-nums; }
+    .notebook-footer { display: flex; justify-content: space-between; gap: 10px; margin-top: 11px; color: var(--muted); font-size: 10px; }
+    .notebook-footer a { color: var(--purple); font-weight: 700; text-decoration: none; }
+    .notebook-footer a:hover { text-decoration: underline; }
+    @media (prefers-reduced-motion: reduce) {
+      .page-flip.turning-forward, .page-flip.turning-backward { transition-duration: .01ms; }
+    }
+    .content-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(250px, .8fr); gap: 15px; margin-top: 22px; }
+    .panel { min-width: 0; padding: 19px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .panel-heading h2 { margin: 0; font-size: 14px; }
+    .panel-heading button { border: 0; background: transparent; color: var(--purple); font-size: 10px; font-weight: 700; }
+    .assignment-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #f0f1f5; }
+    .assignment-row:first-of-type { border-top: 0; }
+    .assignment-icon { display: grid; width: 36px; height: 36px; flex: 0 0 auto; place-items: center; border-radius: 10px; background: #f1efff; font-size: 16px; }
+    .assignment-info { min-width: 0; flex: 1; }
+    .assignment-info strong { display: block; overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+    .assignment-info small { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; }
+    .status { padding: 5px 8px; border-radius: 99px; background: #fff3e5; color: #b77524; font-size: 9px; font-weight: 700; white-space: nowrap; }
+    .status.complete { background: #e8f7f0; color: #318263; }
+    .quick-links { display: grid; gap: 8px; }
+    .quick-link { display: flex; align-items: center; gap: 11px; padding: 11px; border: 1px solid #f0f1f5; border-radius: 10px; color: inherit; text-decoration: none; }
+    .quick-link:hover { border-color: #d7d2ff; background: #fcfbff; }
+    .quick-link > span:first-child { display: grid; width: 33px; height: 33px; place-items: center; border-radius: 9px; background: #f3f1ff; }
+    .quick-link strong { display: block; font-size: 10px; }
+    .quick-link small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .quick-link .arrow { margin-left: auto; color: #a0a5b5; }
+
+    /* Section views */
+    .section-view { min-height: 420px; }
+    .section-view .section-title { margin: 0; font-size: 25px; letter-spacing: -.04em; }
+    .section-view .section-subtitle { margin: 5px 0 22px; color: var(--muted); font-size: 13px; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .detail-card { padding: 19px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .detail-card .module-card h3 { font-size: 14px; }
+    .detail-card h3 { margin: 9px 0 6px; font-size: 14px; }
+    .detail-card p { margin: 0; color: var(--muted); font-size: 12px; }
+    .detail-card .primary-button, .detail-card .secondary-button { margin-top: 15px; }
+    .secondary-button { min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); font-size: 11px; font-weight: 700; }
+    .assignment-list { display: grid; gap: 12px; }
+    .project-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 15px; margin: 0 0 16px; padding: 18px; border: 1px solid #e6e3ff; border-radius: 13px; background: #fff; }
+    .project-form .field { margin: 7px 0 12px; }
+    .project-form .field.full-width, .project-form .form-actions { grid-column: 1 / -1; }
+    .project-form .form-actions { display: flex; align-items: center; gap: 9px; }
+    .project-form .primary-button, .project-form .secondary-button { min-height: 38px; }
+    .assignment-project { display: flex; align-items: center; gap: 14px; padding: 17px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .assignment-project .assignment-icon { width: 44px; height: 44px; }
+    .assignment-project .assignment-info strong { font-size: 13px; }
+    .assignment-project .assignment-info small { font-size: 10px; }
+    .project-link { margin-left: auto; color: var(--purple); font-size: 11px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .project-link:hover { text-decoration: underline; }
+    .profile-identity { display: flex; align-items: center; gap: 19px; margin-bottom: 16px; padding: 21px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+    .profile-placeholder { width: 104px; height: 104px; flex: 0 0 auto; border: 4px solid #f0eeff; font-size: 25px; }
+    .profile-identity-copy { min-width: 0; }
+    .profile-identity-copy h2 { margin: 0; font-size: clamp(17px, 2.5vw, 22px); letter-spacing: -.035em; }
+    .profile-identity-copy p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+    .profile-active { margin-left: auto; padding: 6px 11px; border-radius: 99px; background: #e8f7f0; color: #318263; font-size: 10px; font-weight: 750; white-space: nowrap; }
+    .profile-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .profile-group { min-width: 0; padding: 19px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .profile-group h2 { margin: 0 0 12px; font-size: 14px; }
+    .profile-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; margin: 0; }
+    .profile-details div { min-width: 0; }
+    .profile-details .wide { grid-column: 1 / -1; }
+    .profile-details dt { color: var(--muted); font-size: 10px; }
+    .profile-details dd { margin: 3px 0 0; overflow-wrap: anywhere; font-size: 12px; font-weight: 650; }
+    .empty-state { padding: 35px; border: 1px dashed #dfe1ea; border-radius: 12px; background: #fff; color: var(--muted); text-align: center; font-size: 12px; }
+    .toast { position: fixed; right: 22px; bottom: 22px; z-index: 5; padding: 12px 17px; border-radius: 10px; background: #212743; color: #fff; box-shadow: var(--shadow); font-size: 12px; }
+
+    @media (max-width: 1050px) {
+      .app-shell { grid-template-columns: 215px minmax(0, 1fr); }
+      .module-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-art { margin-right: 12px; }
+    }
+    @media (max-width: 760px) {
+      .app-shell { display: block; }
+      .sidebar { position: fixed; z-index: 4; top: auto; right: 0; bottom: 0; left: 0; display: block; width: 100%; height: auto; padding: 7px 8px calc(7px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); border-right: 0; }
+      .sidebar-brand, .nav-label, .sidebar-bottom { display: none; }
+      .nav-list { display: flex; justify-content: flex-start; gap: 2px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+      .nav-list::-webkit-scrollbar { display: none; }
+      .nav-item { width: 76px; min-width: 76px; flex: 0 0 76px; flex-direction: column; gap: 3px; padding: 6px 3px; border-radius: 8px; font-size: 9px; text-align: center; }
+      .nav-item .nav-icon { line-height: 1.2; }
+      .nav-icon { font-size: 16px; }
+      .main-area { padding: 0 18px 95px; }
+      .topbar { min-height: 60px; }
+      .date-label { display: none; }
+      .page-content { padding-top: 23px; }
+      .hero { min-height: 170px; }
+      .hero-art { margin: 0; font-size: 53px; }
+      .content-grid { grid-template-columns: 1fr; }
+      .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 450px) {
+      .welcome-row { align-items: flex-start; }
+      .welcome-row .primary-button { min-height: 38px; padding: 0 10px; font-size: 10px; }
+      .hero-art { display: none; }
+      .stats-grid { gap: 8px; }
+      .stat-card { gap: 8px; padding: 10px; }
+      .stat-icon { width: 34px; height: 34px; font-size: 15px; }
+      .stat-card strong { font-size: 16px; }
+      .module-grid { gap: 8px; }
+      .module-card { padding: 12px; }
+      .detail-grid, .profile-groups { grid-template-columns: 1fr; }
+      .profile-details { grid-template-columns: 1fr 1fr; }
+      .profile-identity { gap: 13px; padding: 16px; }
+      .profile-placeholder { width: 76px; height: 76px; font-size: 20px; }
+      .profile-active { margin-left: 0; }
+      .project-form { grid-template-columns: 1fr; }
+      .project-form .field.full-width, .project-form .form-actions { grid-column: auto; }
+      .assignment-project { align-items: flex-start; }
+      .assignment-project .project-link { align-self: center; }
+    }
+  </style>
+</head>
+<body>
+  <div id="appShell" class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img class="brand-mark" src="library-logo.jpe" alt="Mohan Babu University logo">
+        <div><strong>Data Science<br>Digital Library</strong></div>
+      </div>
+      <div class="nav-label">LEARN</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-item active" type="button" data-page="home"><span class="nav-icon">⌂</span>Overview</button>
+        <button class="nav-item" type="button" data-page="modules"><span class="nav-icon">▦</span>Modules &amp; Syllabus</button>
+        <button class="nav-item" type="button" data-page="labs"><span class="nav-icon">⌘</span>Lab &amp; Python Editor</button>
+        <button class="nav-item" type="button" data-page="tools"><span class="nav-icon">⚙</span>Data Science Tools</button>
+        <button class="nav-item" type="button" data-page="faculty"><span class="nav-icon">♙</span>Data Science Faculty</button>
+        <button class="nav-item" type="button" data-page="exam"><span class="nav-icon">▤</span>Question Papers &amp; Exam Practice</button>
+        <button class="nav-item" type="button" data-page="viva"><span class="nav-icon">◇</span>Viva Practice</button>
+        <div class="nav-label">MY SPACE</div>
+        <button class="nav-item" type="button" data-page="profile"><span class="nav-icon">◎</span>My Profile</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card">
+          <strong>Need a hand?</strong>
+          <p>Visit your learning resources to find guides and support.</p>
+          <button type="button" class="text-button" data-go="resources">Explore resources →</button>
+        </div>
+        <div class="user-mini">
+          <div class="avatar" aria-hidden="true">ST</div>
+          <div><strong id="sidebarName">Student</strong><small id="sidebarRegister">Student account</small></div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <div class="breadcrumb">Library <span aria-hidden="true">/</span> <strong id="breadcrumbPage">Home</strong></div>
+        <div class="topbar-actions">
+          <span class="date-label" id="todayLabel"></span>
+          <button type="button" class="icon-button" data-page="profile" aria-label="Open student profile" title="Student profile">◎</button>
+          <div class="avatar" aria-hidden="true">ST</div>
+        </div>
+      </header>
+      <div id="pageContent" class="page-content"></div>
+    </div>
+  </div>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="module-1/decks.js"></script>
+  <script src="module-2/decks.js"></script>
+  <script>
+    const MODULES = [
+      { title: "Introduction to Data Science", description: "Data thinking, workflows, and the data science lifecycle.", icon: "🌱", progress: 72 },
+      { title: "Python for Data Science", description: "Python fundamentals, NumPy, and working with data.", icon: "🐍", progress: 48 },
+      { title: "Data Wrangling & Visualization", description: "Clean, transform, and communicate with data.", icon: "📊", progress: 30 },
+      { title: "Statistics & Machine Learning", description: "Explore statistical ideas and core ML methods.", icon: "🧠", progress: 16 },
+      { title: "Big Data & Applications", description: "Discover scalable data systems and real-world uses.", icon: "☁️", progress: 0 }
+    ];
+    const STUDENT_PROFILE = {
+      name: "Student",
+      title: "",
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
+      age: "",
+      gender: "",
+      studentStatus: "",
+      admissionNumber: "",
+      admissionYear: "",
+      rollNumber: "",
+      school: "",
+      department: "",
+      semester: "",
+      academicYear: "",
+      course: "",
+      college: "",
+      curriculumPlan: "",
+      academicStanding: "",
+      academicClassification: "",
+      discountCategory: "",
+      intake: "",
+      programValidityDate: "",
+      fatherName: "",
+      motherName: "",
+      address: "",
+      city: "",
+      state: ""
+    };
+    const INITIAL_PROJECTS = [];
+    const TOOLS = [
+      { title: "Google Colab", description: "Write and run Python notebooks in your browser.", icon: "📓", link: "https://colab.research.google.com/" },
+      { title: "Kaggle", description: "Find datasets, notebooks, and data science challenges.", icon: "🏆", link: "https://www.kaggle.com/" },
+      { title: "GitHub", description: "Host your lab work and collaborate on projects.", icon: "🐙", link: "https://github.com/" },
+      { title: "Jupyter", description: "Explore data with interactive notebooks.", icon: "📈", link: "https://jupyter.org/try" }
+    ];
+    const RESOURCES = [
+      { title: "Python documentation", description: "The official guide and reference for Python.", icon: "📘", link: "https://docs.python.org/3/" },
+      { title: "Pandas getting started", description: "Learn to explore and analyze tabular data.", icon: "🐼", link: "https://pandas.pydata.org/docs/getting_started/" },
+      { title: "scikit-learn user guide", description: "Practical guides to machine learning in Python.", icon: "🤖", link: "https://scikit-learn.org/stable/user_guide.html" },
+      { title: "Our lab projects on GitHub", description: "Open your project repository and keep your work together.", icon: "🔗", link: "https://github.com/" }
+    ];
+
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const pageContent = $("#pageContent");
+    let profile = null;
+    let projects = [];
+    let isAddingProject = false;
+    const notebookStates = {
+      1: { deckIndex: 0, slideIndex: 0, isTurning: false, turnTimer: null },
+      2: { deckIndex: 0, slideIndex: 0, isTurning: false, turnTimer: null }
+    };
+    let toastTimer;
+
+    function readSavedState() {
+      profile = STUDENT_PROFILE;
+      try {
+        projects = JSON.parse(localStorage.getItem("dsdl-projects") || "null") || INITIAL_PROJECTS;
+      } catch (error) {
+        console.error("Could not read saved lab projects.", error);
+        projects = INITIAL_PROJECTS;
+      }
+    }
+
+    function saveProjects() {
+      try {
+        localStorage.setItem("dsdl-projects", JSON.stringify(projects));
+        return true;
+      } catch (error) {
+        console.error("Could not save lab projects.", error);
+        showToast("Project could not be saved in this browser.");
+        return false;
+      }
+    }
+
+    function initials(name) {
+      return name.trim().split(/\s+/).slice(0, 2).map(part => part[0] || "").join("").toUpperCase() || "ST";
+    }
+
+    function showToast(message) {
+      const toast = $("#toast");
+      toast.textContent = message;
+      toast.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.add("hidden"), 2800);
+    }
+
+    function openApp() {
+      $("#sidebarName").textContent = profile.name;
+      $("#sidebarRegister").textContent = profile.rollNumber;
+      $("#todayLabel").textContent = new Intl.DateTimeFormat("en", { weekday: "short", month: "short", day: "numeric" }).format(new Date());
+      renderPage("home");
+    }
+
+    function moduleCards() {
+      return `<div class="module-grid">${MODULES.map((module, index) => `
+        <article class="module-card">
+          <div class="module-top"><span class="module-number">MODULE 0${index + 1}</span><span class="module-emoji" aria-hidden="true">${module.icon}</span></div>
+          <h3>${module.title}</h3>
+          <p>${module.description}</p>
+          <div class="progress-meta"><span>Progress</span><span>${module.progress}%</span></div>
+          <div class="progress-track" role="progressbar" aria-label="${module.title} progress" aria-valuenow="${module.progress}" aria-valuemin="0" aria-valuemax="100"><span style="width:${module.progress}%"></span></div>
+        </article>`).join("")}</div>`;
+    }
+
+    function projectRows(limit = projects.length) {
+      if (!projects.length) return '<div class="empty-state">No lab projects yet. Add a project and link its GitHub repository.</div>';
+      return projects.slice(0, limit).map(project => `
+        <div class="assignment-row">
+          <div class="assignment-icon" aria-hidden="true">⌘</div>
+          <div class="assignment-info"><strong>${escapeHTML(project.title)}</strong><small>${escapeHTML(project.description)}</small></div>
+          <span class="status ${project.status === "Complete" ? "complete" : ""}">${escapeHTML(project.status)}</span>
+        </div>`).join("");
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[character]);
+    }
+
+    function resourceCards(items) {
+      return `<div class="detail-grid">${items.map(item => `
+        <article class="detail-card">
+          <span aria-hidden="true">${item.icon}</span>
+          <h3>${escapeHTML(item.title)}</h3>
+          <p>${escapeHTML(item.description)}</p>
+          <a class="secondary-button" href="${item.link}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;text-decoration:none">Open resource ↗</a>
+        </article>`).join("")}</div>`;
+    }
+
+    function renderHome() {
+      return `
+        <section class="welcome-row">
+          <div><h1>Good to see you, ${escapeHTML(profile.name.split(/\s+/)[0])} 👋</h1><p>Ready to make progress on your data science journey?</p></div>
+          <button class="primary-button" type="button" data-page="profile">◎ <span>My profile</span></button>
+        </section>
+        <section class="hero">
+          <div class="hero-content">
+            <div class="hero-kicker">Your learning journey</div>
+            <h2>Curiosity meets data.</h2>
+            <p>Build your skills one idea, one experiment, and one project at a time.</p>
+            <button type="button" class="hero-button" data-page="modules">Explore your modules&nbsp; →</button>
+          </div>
+          <div class="hero-art" aria-hidden="true">📚</div>
+        </section>
+        <section class="stats-grid" aria-label="Learning overview">
+          <article class="stat-card"><span class="stat-icon">▦</span><div><strong>05</strong><small>Course modules</small></div></article>
+          <article class="stat-card"><span class="stat-icon">⌘</span><div><strong>${String(projects.length).padStart(2, "0")}</strong><small>Lab projects</small></div></article>
+          <article class="stat-card"><span class="stat-icon">✦</span><div><strong>02</strong><small>Projects in progress</small></div></article>
+          <article class="stat-card"><span class="stat-icon">↗</span><div><strong>${MODULES.filter(module => module.progress > 0).length}</strong><small>Modules started</small></div></article>
+        </section>
+        <section>
+          <div class="section-heading"><div><h2>Your learning modules</h2><p>Five steps to grow your data science toolkit.</p></div><button type="button" data-page="modules">View all modules →</button></div>
+          ${moduleCards()}
+        </section>
+        <section class="content-grid">
+          <article class="panel">
+            <div class="panel-heading"><h2>Lab assignments</h2><button type="button" data-page="labs">View all →</button></div>
+            ${projectRows(3)}
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><h2>Quick access</h2></div>
+            <div class="quick-links">
+              <button type="button" class="quick-link" data-page="tools"><span>⚙️</span><span><strong>Data science tools</strong><small>Notebook, datasets & more</small></span><span class="arrow">→</span></button>
+              <button type="button" class="quick-link" data-page="resources"><span>📚</span><span><strong>Study resources</strong><small>Guides and documentation</small></span><span class="arrow">→</span></button>
+              <button type="button" class="quick-link" data-page="ai"><span>✨</span><span><strong>AI learning assistant</strong><small>Explore your AI model space</small></span><span class="arrow">→</span></button>
+            </div>
+          </article>
+        </section>`;
+    }
+
+    function renderProjects() {
+      return `
+        <section class="section-view">
+          <h1 class="section-title">Lab &amp; Python Editor</h1>
+          <p class="section-subtitle">Keep track of your practical work and link each project to its GitHub repository.</p>
+          <div class="section-heading"><div><h2>Your projects</h2><p>Add a repository link to make your work easy to find.</p></div><button class="primary-button" id="addProjectButton" type="button">${isAddingProject ? "Cancel" : "＋ Add project"}</button></div>
+          ${isAddingProject ? `
+          <form id="projectForm" class="project-form">
+            <div class="field"><label for="projectTitle">Project name</label><input id="projectTitle" name="title" placeholder="e.g. Exploratory Data Analysis" required maxlength="100"></div>
+            <div class="field"><label for="projectStatus">Status</label><select id="projectStatus" name="status"><option>In progress</option><option>Ready to start</option><option>Complete</option></select></div>
+            <div class="field full-width"><label for="projectDescription">Description</label><input id="projectDescription" name="description" placeholder="What are you building?" maxlength="240"></div>
+            <div class="field full-width"><label for="projectLink">GitHub repository URL</label><input id="projectLink" name="link" type="url" placeholder="https://github.com/owner/repository" required></div>
+            <div class="form-actions"><button class="primary-button" type="submit">Save project</button><button class="secondary-button" id="cancelProjectButton" type="button">Cancel</button></div>
+          </form>` : ""}
+          <div class="assignment-list">${projects.length ? projects.map(project => `
+            <article class="assignment-project">
+              <div class="assignment-icon" aria-hidden="true">⌘</div>
+              <div class="assignment-info"><strong>${escapeHTML(project.title)}</strong><small>${escapeHTML(project.description)}</small><small><span class="status ${project.status === "Complete" ? "complete" : ""}">${escapeHTML(project.status)}</span></small></div>
+              <a class="project-link" href="${project.link}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+            </article>`).join("") : '<div class="empty-state">No projects added yet. Use “Add project” to link your first GitHub repository.</div>'}</div>
+        </section>`;
+    }
+
+    function renderNotebook(moduleNumber, decks) {
+      if (!decks || decks.length === 0) {
+        return `<div class="notebook-panel"><div class="empty-state">Module ${moduleNumber} presentations are not available.</div></div>`;
+      }
+      const state = notebookStates[moduleNumber];
+      const deck = decks[state.deckIndex];
+      const slideNumber = state.slideIndex + 1;
+      const imageExtension = moduleNumber === 1 ? "png" : "jpg";
+      const imagePath = `module-${moduleNumber}/slides/${deck.slug}/slide-${String(slideNumber).padStart(3, "0")}.${imageExtension}`;
+      return `
+        <section class="notebook-panel" aria-label="Module ${moduleNumber} presentation notebook">
+          <div class="section-heading" style="margin-top:0">
+            <div><h2>Module ${moduleNumber} · Presentation notebook</h2><p>Select a lecture and use the arrows or slider to turn pages.</p></div>
+          </div>
+          <div class="notebook-toolbar">
+            <div class="field">
+              <label for="deckSelect-${moduleNumber}">Presentation</label>
+              <select id="deckSelect-${moduleNumber}" data-notebook-deck="${moduleNumber}">
+                ${decks.map((item, index) => `<option value="${index}"${index === state.deckIndex ? " selected" : ""}>${escapeHTML(item.title)}</option>`).join("")}
+              </select>
+            </div>
+          </div>
+          <div class="notebook-stage">
+            <div id="notebookBook-${moduleNumber}" class="notebook-book" tabindex="0" role="group" aria-label="Module ${moduleNumber} notebook pages. Use left and right arrow keys to turn pages.">
+              <img id="notebookSlide-${moduleNumber}" class="notebook-slide" src="${imagePath}" alt="${escapeHTML(deck.title)} — slide ${slideNumber}">
+              <div id="pageFlip-${moduleNumber}" class="page-flip" aria-hidden="true" hidden>
+                <img class="page-face page-front" alt="">
+                <img class="page-face page-back" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="notebook-controls">
+            <button id="previousSlide-${moduleNumber}" data-notebook-previous="${moduleNumber}" type="button" aria-label="Previous slide"${slideNumber === 1 ? " disabled" : ""}>← Previous</button>
+            <input id="slideRange-${moduleNumber}" data-notebook-range="${moduleNumber}" type="range" min="1" max="${deck.slideCount}" value="${slideNumber}" aria-label="Choose slide">
+            <span id="slideCount-${moduleNumber}" class="notebook-page-count" aria-live="polite">${slideNumber} / ${deck.slideCount}</span>
+            <button id="nextSlide-${moduleNumber}" data-notebook-next="${moduleNumber}" type="button" aria-label="Next slide"${slideNumber === deck.slideCount ? " disabled" : ""}>Next →</button>
+          </div>
+          <div class="notebook-footer">
+            <span>${escapeHTML(deck.title)}</span>
+            <a href="module-${moduleNumber}/${encodeURIComponent(deck.file)}" download>Download presentation ↓</a>
+          </div>
+        </section>`;
+    }
+
+    function renderModulePage() {
+      return `
+        <section class="section-view">
+          <h1 class="section-title">Modules &amp; Syllabus</h1>
+          <p class="section-subtitle">Explore your five core data science modules and turn through the lecture notebooks.</p>
+          ${moduleCards()}
+          ${renderNotebook(1, window.MODULE_ONE_DECKS)}
+          ${renderNotebook(2, window.MODULE_TWO_DECKS)}
+        </section>`;
+    }
+
+    function updateNotebookSlide(moduleNumber, nextIndex, animate = true) {
+      const decks = moduleNumber === 1 ? window.MODULE_ONE_DECKS : window.MODULE_TWO_DECKS;
+      const state = notebookStates[moduleNumber];
+      const deck = decks[state.deckIndex];
+      const currentIndex = state.slideIndex;
+      const boundedIndex = Math.max(0, Math.min(deck.slideCount - 1, nextIndex));
+      if (boundedIndex === currentIndex || state.isTurning) return;
+      const slideNumber = boundedIndex + 1;
+      const imageExtension = moduleNumber === 1 ? "png" : "jpg";
+      const currentPath = `module-${moduleNumber}/slides/${deck.slug}/slide-${String(currentIndex + 1).padStart(3, "0")}.${imageExtension}`;
+      const targetPath = `module-${moduleNumber}/slides/${deck.slug}/slide-${String(slideNumber).padStart(3, "0")}.${imageExtension}`;
+      const image = $(`#notebookSlide-${moduleNumber}`);
+      const flip = $(`#pageFlip-${moduleNumber}`);
+      const frontFace = $(".page-front", flip);
+      const backFace = $(".page-back", flip);
+      const canAnimate = animate &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        image.complete &&
+        image.naturalWidth > 0;
+      state.slideIndex = boundedIndex;
+
+      if (canAnimate) {
+        state.isTurning = true;
+        const forward = boundedIndex > currentIndex;
+        const finishTurn = event => {
+          if (event && (event.target !== flip || event.propertyName !== "transform")) return;
+          if (!state.isTurning) return;
+          clearTimeout(state.turnTimer);
+          flip.removeEventListener("transitionend", finishTurn);
+          flip.classList.remove("turning-forward", "turning-backward");
+          flip.hidden = true;
+          image.src = targetPath;
+          state.isTurning = false;
+          $(`#previousSlide-${moduleNumber}`).disabled = state.slideIndex === 0;
+          $(`#nextSlide-${moduleNumber}`).disabled = state.slideIndex === deck.slideCount - 1;
+          $(`#slideRange-${moduleNumber}`).disabled = false;
+          $(`#deckSelect-${moduleNumber}`).disabled = false;
+        };
+        frontFace.src = currentPath;
+        backFace.src = targetPath;
+        image.src = targetPath;
+        flip.hidden = false;
+        flip.classList.remove("turning-forward", "turning-backward");
+        flip.style.transition = "none";
+        flip.style.transform = "rotateY(0)";
+        void flip.offsetWidth;
+        flip.style.removeProperty("transition");
+        flip.style.removeProperty("transform");
+        flip.classList.add(forward ? "turning-forward" : "turning-backward");
+        flip.addEventListener("transitionend", finishTurn);
+        state.turnTimer = setTimeout(() => finishTurn(), 800);
+      } else {
+        flip.hidden = true;
+        flip.classList.remove("turning-forward", "turning-backward");
+        image.src = targetPath;
+      }
+
+      image.alt = `${deck.title} — slide ${slideNumber}`;
+      $(`#slideRange-${moduleNumber}`).value = String(slideNumber);
+      $(`#slideCount-${moduleNumber}`).textContent = `${slideNumber} / ${deck.slideCount}`;
+      $(`#previousSlide-${moduleNumber}`).disabled = slideNumber === 1 || canAnimate;
+      $(`#nextSlide-${moduleNumber}`).disabled = slideNumber === deck.slideCount || canAnimate;
+      $(`#slideRange-${moduleNumber}`).disabled = canAnimate;
+      $(`#deckSelect-${moduleNumber}`).disabled = canAnimate;
+    }
+
+    function renderProfile() {
+      const field = (label, value, wide = false) => `
+        <div${wide ? ' class="wide"' : ""}>
+          <dt>${label}</dt>
+          <dd>${value ? escapeHTML(value) : "—"}</dd>
+        </div>`;
+      const group = (title, fields) => `
+        <section class="profile-group">
+          <h2>${title}</h2>
+          <dl class="profile-details">${fields}</dl>
+        </section>`;
+      return `
+        <section class="section-view">
+          <h1 class="section-title">Student profile</h1>
+          <p class="section-subtitle">Student and academic information. Profile details are read-only.</p>
+          <div class="profile-identity">
+            <div class="avatar profile-placeholder" aria-hidden="true">ST</div>
+            <div class="profile-identity-copy">
+              <h2>${escapeHTML(profile.name)}</h2>
+              <p>${escapeHTML(profile.course)}</p>
+              <p>${escapeHTML(profile.college)}</p>
+            </div>
+            <span class="profile-active">${escapeHTML(profile.studentStatus)}</span>
+          </div>
+          <div class="profile-groups">
+            ${group("Enrollment", [
+              field("Student status", profile.studentStatus),
+              field("Admission number", profile.admissionNumber),
+              field("Admission year", profile.admissionYear),
+              field("Roll number", profile.rollNumber),
+              field("School", profile.school),
+              field("Department", profile.department),
+              field("Semester", profile.semester),
+              field("Academic year", profile.academicYear)
+            ].join(""))}
+            ${group("Course details", [
+              field("Course name", profile.course, true),
+              field("College / university", profile.college, true),
+              field("Curriculum plan", profile.curriculumPlan),
+              field("Academic standing", profile.academicStanding),
+              field("Academic classification", profile.academicClassification),
+              field("Discount category", profile.discountCategory, true),
+              field("Intake", profile.intake),
+              field("Program validity date", profile.programValidityDate)
+            ].join(""))}
+            ${group("Personal information", [
+              field("Profile title", profile.title),
+              field("First name", profile.firstName, true),
+              field("Last name", profile.lastName),
+              field("Date of birth", profile.dateOfBirth),
+              field("Age", profile.age),
+              field("Gender", profile.gender)
+            ].join(""))}
+            ${group("Family & address", [
+              field("Father's name", profile.fatherName, true),
+              field("Mother's name", profile.motherName, true),
+              field("Address", profile.address, true),
+              field("City / district", profile.city),
+              field("State", profile.state)
+            ].join(""))}
+          </div>
+        </section>`;
+    }
+
+    function renderPage(page) {
+      Object.entries(notebookStates).forEach(([moduleNumber, state]) => {
+        if (!state.isTurning) return;
+        clearTimeout(state.turnTimer);
+        state.isTurning = false;
+        const flip = $(`#pageFlip-${moduleNumber}`);
+        if (flip) {
+          flip.hidden = true;
+          flip.classList.remove("turning-forward", "turning-backward");
+        }
+      });
+      const titles = { home: "Overview", modules: "Modules & Syllabus", labs: "Lab & Python Editor", tools: "Data Science Tools", faculty: "Data Science Faculty", exam: "Question Papers & Exam Practice", viva: "Viva Practice", profile: "My Profile", resources: "Resources", ai: "AI model" };
+      document.querySelectorAll(".nav-item").forEach(button => button.classList.toggle("active", button.dataset.page === page));
+      $("#breadcrumbPage").textContent = titles[page] || "Home";
+      if (page === "home") pageContent.innerHTML = renderHome();
+      else if (page === "modules") pageContent.innerHTML = renderModulePage();
+      else if (page === "labs") pageContent.innerHTML = renderProjects();
+      else if (page === "tools") pageContent.innerHTML = `<section class="section-view"><h1 class="section-title">Data science tools</h1><p class="section-subtitle">A few useful places to experiment, analyze, and build.</p>${resourceCards(TOOLS)}</section>`;
+      else if (page === "faculty") pageContent.innerHTML = `
+        <section class="section-view">
+          <h1 class="section-title">Data Science Faculty</h1>
+          <p class="section-subtitle">Faculty information for your program.</p>
+          <div class="detail-card" style="max-width:720px;padding:24px">
+            <h3>Faculty directory</h3>
+            <p>Faculty names and contact details have not been added to the library yet.</p>
+          </div>
+        </section>`;
+      else if (page === "exam") pageContent.innerHTML = `
+        <section class="section-view">
+          <h1 class="section-title">Question Papers &amp; Exam Practice</h1>
+          <p class="section-subtitle">Review core course topics and practice explaining the ideas behind them.</p>
+          <div class="detail-grid">
+            ${MODULES.map((module, index) => `
+              <article class="detail-card">
+                <span aria-hidden="true">${module.icon}</span>
+                <h3>Module 0${index + 1} · ${escapeHTML(module.title)}</h3>
+                <p>${escapeHTML(module.description)}</p>
+                <details style="margin-top:14px;color:var(--muted);font-size:11px">
+                  <summary style="cursor:pointer;color:var(--purple);font-weight:700">Show a revision prompt</summary>
+                  <p style="margin-top:9px">Describe the main ideas in this module and give one practical example of how you would use them in a data science project.</p>
+                </details>
+              </article>`).join("")}
+          </div>
+        </section>`;
+      else if (page === "viva") pageContent.innerHTML = `
+        <section class="section-view">
+          <h1 class="section-title">Viva Practice</h1>
+          <p class="section-subtitle">Use these prompts to rehearse clear, concise answers about data science.</p>
+          <div class="assignment-list">
+            ${[
+              ["What are the main stages of a data science workflow?", "A typical workflow includes defining the problem, collecting and preparing data, exploring it, building and evaluating a model, and communicating or deploying the results."],
+              ["Why should a dataset be split before model evaluation?", "A separate test set estimates how well a model generalizes to unseen data, rather than measuring performance only on examples it trained on."],
+              ["When would you use a visualization?", "Use a visualization to explore patterns, compare values, spot unusual observations, or communicate findings to an audience."]
+            ].map(([question, answer]) => `
+              <details class="detail-card" style="padding:18px">
+                <summary style="cursor:pointer;font-size:13px;font-weight:700">${escapeHTML(question)}</summary>
+                <p style="margin-top:12px">${escapeHTML(answer)}</p>
+              </details>`).join("")}
+          </div>
+        </section>`;
+      else if (page === "resources") pageContent.innerHTML = `<section class="section-view"><h1 class="section-title">Learning resources</h1><p class="section-subtitle">Trusted documentation and starting points for your studies.</p>${resourceCards(RESOURCES)}</section>`;
+      else if (page === "ai") pageContent.innerHTML = `
+        <section class="section-view">
+          <h1 class="section-title">AI model space</h1>
+          <p class="section-subtitle">A starting point for exploring AI and machine-learning ideas in your coursework.</p>
+          <div class="detail-card" style="max-width:720px;padding:28px">
+            <span style="font-size:30px" aria-hidden="true">✨</span>
+            <h3 style="font-size:18px">Learn how models learn</h3>
+            <p>Explore supervised learning, try a notebook, and document your experiments in a lab project. This library page is a learning hub; it does not connect to an AI model yet.</p>
+            <a class="primary-button" href="https://colab.research.google.com/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;margin-top:18px;text-decoration:none">Open a notebook ↗</a>
+          </div>
+        </section>`;
+      else if (page === "profile") pageContent.innerHTML = renderProfile();
+      pageContent.querySelectorAll("[data-page]").forEach(button => button.addEventListener("click", () => renderPage(button.dataset.page)));
+      const addButton = $("#addProjectButton");
+      if (addButton) addButton.addEventListener("click", () => {
+        isAddingProject = !isAddingProject;
+        renderPage("labs");
+      });
+      const cancelProjectButton = $("#cancelProjectButton");
+      if (cancelProjectButton) cancelProjectButton.addEventListener("click", () => {
+        isAddingProject = false;
+        renderPage("labs");
+      });
+      const projectForm = $("#projectForm");
+      if (projectForm) projectForm.addEventListener("submit", saveProjectForm);
+      document.querySelectorAll("[data-notebook-deck]").forEach(select => {
+        const moduleNumber = Number(select.dataset.notebookDeck);
+        const state = notebookStates[moduleNumber];
+        select.addEventListener("change", event => {
+          state.deckIndex = Number(event.currentTarget.value);
+          state.slideIndex = 0;
+          renderPage("modules");
+        });
+        $(`[data-notebook-previous="${moduleNumber}"]`).addEventListener("click", () => {
+          updateNotebookSlide(moduleNumber, state.slideIndex - 1);
+        });
+        $(`[data-notebook-next="${moduleNumber}"]`).addEventListener("click", () => {
+          updateNotebookSlide(moduleNumber, state.slideIndex + 1);
+        });
+        $(`[data-notebook-range="${moduleNumber}"]`).addEventListener("input", event => {
+          updateNotebookSlide(moduleNumber, Number(event.currentTarget.value) - 1);
+        });
+        const notebookBook = $(`#notebookBook-${moduleNumber}`);
+        let pointerStartX = null;
+        notebookBook.addEventListener("pointerdown", event => { pointerStartX = event.clientX; });
+        notebookBook.addEventListener("pointerup", event => {
+          if (pointerStartX === null) return;
+          const distance = event.clientX - pointerStartX;
+          pointerStartX = null;
+          if (Math.abs(distance) > 45) updateNotebookSlide(moduleNumber, state.slideIndex + (distance < 0 ? 1 : -1));
+        });
+        notebookBook.addEventListener("pointercancel", () => { pointerStartX = null; });
+        notebookBook.addEventListener("keydown", event => {
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            updateNotebookSlide(moduleNumber, state.slideIndex + 1);
+          } else if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            updateNotebookSlide(moduleNumber, state.slideIndex - 1);
+          }
+        });
+      });
+    }
+
+    function saveProjectForm(event) {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const title = String(data.get("title")).trim();
+      const link = String(data.get("link")).trim();
+      let parsedLink;
+      try { parsedLink = new URL(link); } catch { showToast("Enter a valid GitHub repository URL."); return; }
+      if (parsedLink.protocol !== "https:" || parsedLink.hostname.toLowerCase() !== "github.com" || parsedLink.pathname.split("/").filter(Boolean).length < 2) {
+        showToast("Use a repository URL like https://github.com/owner/repository.");
+        return;
+      }
+      const description = String(data.get("description")).trim() || "Student lab project.";
+      const status = String(data.get("status"));
+      projects.unshift({ title, description, link: parsedLink.href, status });
+      if (!saveProjects()) {
+        projects.shift();
+        return;
+      }
+      isAddingProject = false;
+      renderPage("labs");
+      showToast("GitHub project added.");
+    }
+
+    document.querySelectorAll("[data-page]").forEach(button => {
+      button.addEventListener("click", () => renderPage(button.dataset.page));
+    });
+    document.querySelectorAll("[data-go]").forEach(button => {
+      button.addEventListener("click", () => renderPage(button.dataset.go));
+    });
+    readSavedState();
+    openApp();
+  </script>
+</body>
+</html>
